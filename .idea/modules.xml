@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Interpreter.iml" filepath="$PROJECT_DIR$/.idea/modules/Interpreter.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Interpreter_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Interpreter_main.iml" group="Interpreter" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Interpreter_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Interpreter_test.iml" group="Interpreter" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/main.iml" filepath="$PROJECT_DIR$/src/main/main.iml" />
     </modules>
   </component>
 </project>

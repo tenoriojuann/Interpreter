@@ -21,6 +21,7 @@ public class AST {
 
     // Adds new entries to the program, per line
     public void setObject(JsonObject object){
+
         program.getAsJsonArray("program").add(object);
     }
 }

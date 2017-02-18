@@ -16,7 +16,9 @@ public class Analyzer {
         ch = read();
     }
 
-    public void openFile(FileInputStream url){
+
+
+    private void openFile(FileInputStream url){
         this.url = url;
         sb = new BufferedReader(new InputStreamReader(url));
     }
@@ -76,8 +78,12 @@ public class Analyzer {
                             ch = read();
                             state = 7;
                             continue;
+                        default:
+                            state =2;
+                            continue;
 
                     }
+
 
                 //  The case for when a number is scanned
                 case 2:
@@ -90,7 +96,7 @@ public class Analyzer {
                         ch = read();
                     }
                     else{
-                        state = 6;
+                        state = 4;
                     }
                     continue;
 
@@ -152,7 +158,6 @@ public class Analyzer {
                     else {
                         return new Token("AS", "=");
                     }
-
 
                 // Found a comment
                 case 7:

@@ -63,7 +63,7 @@ public class Analyzer {
                 case 1:
                     switch (ch){
                         case ' ':
-                            ch = read();
+                            ch = read(); // spaces can be ignored
                             continue;
                         case '.':
                             ch = read();

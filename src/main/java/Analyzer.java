@@ -8,17 +8,7 @@ public class Analyzer {
     private char ch;
     private static char EOF = (char) (-1);
 
-    String[] splitLine;
 
-    String[] OPERATORS = {"*","-","+","/","="};
-
-    String[] TYPES = {"int", "integer"};
-
-    String[] KEYWORDS = {"and","else","false", "if", "nil","repeat", "true"
-                         "break", "elseif", "for" , "in", "not", "return", "until",
-                         "do", "end", "function", "local", "or", "then", "while"};
-
-    String[] TOKENS;
     public Analyzer(FileInputStream url){
 
         openFile(url);
@@ -31,6 +21,9 @@ public class Analyzer {
         sb = new BufferedReader(new InputStreamReader(url));
     }
 
+
+
+    // Reads character by character
     private char read(){
         try {
             return (char) (sb.read());
@@ -45,7 +38,6 @@ public class Analyzer {
         int state =1;
         int numBuffer =0;
         String alphaBuffer = "";
-        int decBuffer=0;
         boolean skipped = false;
         while(true){
 
@@ -61,6 +53,8 @@ public class Analyzer {
                 }
                 return null;
             }
+
+
 
             switch (state){
 
@@ -78,8 +72,14 @@ public class Analyzer {
                             ch=read();
                             state=6;
                             continue;
+                        case '-':
+                            ch = read();
+                            state = 7;
+                            continue;
 
                     }
+
+                //  The case for when a number is scanned
                 case 2:
                     if(Character.isDigit(ch)){
                         numBuffer = 0;
@@ -93,6 +93,8 @@ public class Analyzer {
                         state = 6;
                     }
                     continue;
+
+                // Number is found by itself
                 case 3:
                     if(Character.isDigit(ch)){
                         numBuffer *= 10;
@@ -105,6 +107,7 @@ public class Analyzer {
                     }
                     continue;
 
+                // Either a keyword is found or there is an invalid input
                 case 4:
 
                     if(Character.isAlphabetic(ch) || ch == '_') {
@@ -122,6 +125,8 @@ public class Analyzer {
                         return  new Token("INVALID","Invalid input: "+ alphaBuffer);
                     }
                     continue;
+
+                // Keyword is found or a variable
                 case 5:
 
                     if(Character.isAlphabetic(ch) || Character.isDigit(ch) || ch == '_'){
@@ -138,6 +143,7 @@ public class Analyzer {
 
                     continue;
 
+                // A boolean comparison is found or an assignment
                 case 6:
                     if(ch == '='){
                         ch = read();
@@ -147,54 +153,25 @@ public class Analyzer {
                         return new Token("AS", "=");
                     }
 
+
+                // Found a comment
+                case 7:
+                    if(ch == '-'){
+                        ch = read();
+                        return new Token("CM","--");
+                    }
+                    ch = read();
+                    continue;
+                case 8:
+                    if(ch == '\n'){
+                        state =1;
+                    }
+                    ch = read();
+                    continue;
+
             }
         }
     }
 
-    public String getLine() throws IOException {
-        if (sb.readLine() == null){
-            return null;
-        }
-        else {
-            return sb.readLine();
-        }
-    }
-
-    public void SplitLine(String line) {
-        splitLine = line.split(" ");
-    }
-
-    // Probably moving this to the Parser.java class
-
-    public String getType(){
-
-        for(String type : TYPES) {
-            if (type.equalsIgnoreCase(splitLine[0])){
-                return type;
-            }
-        }
-        return "var";
-    }
-
-    public String getOperator(){
-
-        for(String op : OPERATORS){
-            if(splitLine[1].equals(op)){
-                return op;
-            }
-        }
-        return "none";
-    }
-
-    public boolean isComment(){
-        for(String word : splitLine){
-            if (word.contains("--")){
-                return true;
-            }
-
-        }
-
-        return false;
-    }
 
 }

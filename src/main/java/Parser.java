@@ -9,13 +9,5 @@ public class Parser {
 
     }
 
-    // This will work for the int case
-    // But we'll need to re-write it for more complex things
-    public JsonObject varType(String type, int value){
-        JsonObject typeJ = new JsonObject();
-        typeJ.addProperty(type, value);
-
-        return typeJ;
-    }
 
 }

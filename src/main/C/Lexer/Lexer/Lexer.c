@@ -51,25 +51,25 @@ struct Token nextToken(FILE *fp) {
 			switch (ch) {
 			
 			case '(':
-				ch = fgetc(fp);
+				
 				returnedTOKEN = Empty;
 				strcpy(returnedTOKEN.token, "LP");
 				strcpy(returnedTOKEN.lexeme, "(");
 				return returnedTOKEN;
 			case ')':
-				ch = fgetc(fp);
+				
 				returnedTOKEN = Empty;
 				strcpy(returnedTOKEN.token, "RP");
 				strcpy(returnedTOKEN.lexeme, ")");
 				return returnedTOKEN;
 			case '{':
-				ch = fgetc(fp);
+				
 				returnedTOKEN = Empty;
 				strcpy(returnedTOKEN.token, "LB");
 				strcpy(returnedTOKEN.lexeme, "{");
 				return returnedTOKEN;
 			case '}':
-				ch = fgetc(fp);
+				
 				returnedTOKEN = Empty;
 				strcpy(returnedTOKEN.token, "RB");
 				strcpy(returnedTOKEN.lexeme, "}");
@@ -85,13 +85,13 @@ struct Token nextToken(FILE *fp) {
 					continue;
 			case '.':
 					
-					ch = fgetc(fp);
 					returnedTOKEN = Empty;
 					strcpy(returnedTOKEN.token, "PD");
 					strcpy(returnedTOKEN.lexeme, ".");
 					return returnedTOKEN;
 		
 			case '+':
+
 					returnedTOKEN = Empty;
 					strcpy(returnedTOKEN.token, "SM");
 					strcpy(returnedTOKEN.lexeme, "+");
@@ -108,6 +108,20 @@ struct Token nextToken(FILE *fp) {
 				ch = fgetc(fp);
 					state = 7;
 					continue;
+
+			case '*':
+
+				returnedTOKEN = Empty;
+				strcpy(returnedTOKEN.token, "MUL");
+				strcpy(returnedTOKEN.lexeme, "*");
+				return returnedTOKEN;
+
+			case '/':
+
+				returnedTOKEN = Empty;
+				strcpy(returnedTOKEN.token, "DIV");
+				strcpy(returnedTOKEN.lexeme, "/");
+				return returnedTOKEN;
 
 			default:
 					state = 2;
@@ -136,7 +150,7 @@ struct Token nextToken(FILE *fp) {
 		case 3:
 			if (isdigit(ch)) {
 				numBuffer *= 10;
-				numBuffer += atoi(ch);
+				numBuffer += (ch - '0');
 
 				
 				ch = fgetc(fp);
@@ -149,7 +163,8 @@ struct Token nextToken(FILE *fp) {
 			}
 			continue;
 
-			// Either a keyword is found or there is an invalid input
+			// A Letter/invalid character has been identified
+
 		case 4:
 
 			if (isalpha(ch) || ch == '_') {
@@ -164,7 +179,7 @@ struct Token nextToken(FILE *fp) {
 				strncat(alphaBuffer, &ch, 1);
 
 				
-				ch = fgetc(fp);
+				
 				returnedTOKEN = Empty;
 				strcpy(returnedTOKEN.token, "INV");
 				strcpy(returnedTOKEN.lexeme, alphaBuffer);
@@ -184,8 +199,14 @@ struct Token nextToken(FILE *fp) {
 			}
 			else {
 
-				
-	
+				// The ID/Keyword has been identified 
+				// We need to put the last character taken
+				// back in the stream
+				// and reset the state
+
+				state = 1;
+				ungetc(ch, fp);
+
 				if (strcmp(alphaBuffer, "int") == 0) {
 					returnedTOKEN = Empty;
 					strcpy(returnedTOKEN.token, "KW");
@@ -198,21 +219,21 @@ struct Token nextToken(FILE *fp) {
 					returnedTOKEN = Empty;
 					strcpy(returnedTOKEN.token, "KW");
 					strcpy(returnedTOKEN.lexeme, "end");
-
+					
 					return returnedTOKEN;
 				}
 				else if (strcmp(alphaBuffer, "if") == 0) {
 					returnedTOKEN = Empty;
 					strcpy(returnedTOKEN.token, "KW");
 					strcpy(returnedTOKEN.lexeme, "if");
-
+					
 					return returnedTOKEN;
 				}
 				else if (strcmp(alphaBuffer, "while") == 0) {
 					returnedTOKEN = Empty;
 					strcpy(returnedTOKEN.token, "KW");
 					strcpy(returnedTOKEN.lexeme, "while");
-
+					
 					return returnedTOKEN;
 				}
 
@@ -220,8 +241,7 @@ struct Token nextToken(FILE *fp) {
 				strcpy(returnedTOKEN.token, "ID");
 				strcpy(returnedTOKEN.lexeme, alphaBuffer);
 
-				memset(&alphaBuffer[0], 0, sizeof(alphaBuffer));
-				strncat(alphaBuffer, &ch, 1);
+
 
 				return  returnedTOKEN;
 			}
@@ -234,31 +254,42 @@ struct Token nextToken(FILE *fp) {
 			
 				ch = fgetc(fp);
 				returnedTOKEN = Empty;
-				strcpy(returnedTOKEN.token, "EQ");
+				strcpy(returnedTOKEN.token, "IEQ");
 				strcpy(returnedTOKEN.lexeme, "==");
 				return  returnedTOKEN;
 			}
 			else {
 
 				returnedTOKEN = Empty;
-				strcpy(returnedTOKEN.token, "ASS");
+				strcpy(returnedTOKEN.token, "EQ");
 				strcpy(returnedTOKEN.lexeme, "=");
 				return  returnedTOKEN;
 			}
 
-			// Found a comment
+			// EIther a comment is found or a subtraction operator
 		case 7:
 			if (ch == '-') {
 				
-				ch = fgetc(fp);
+			
 				returnedTOKEN = Empty;
 				strcpy(returnedTOKEN.token, "CM");
 				strcpy(returnedTOKEN.lexeme, "--");
 				return  returnedTOKEN;
 			}
+			else {
+				
+				returnedTOKEN = Empty;
+				strcpy(returnedTOKEN.token, "SUB");
+				strcpy(returnedTOKEN.lexeme, "-");
+				return  returnedTOKEN;
+
+			}
 			
 			ch = fgetc(fp);
 			continue;
+
+			// End of Line
+
 		case 8:
 			if (ch == '\n') {
 				state = 1;

@@ -18,7 +18,18 @@ gradlew
 gradlew.bat
 /src/test
 
-
+# C stuff
+src/main/C/Lexer/.vs/
+src/main/C/Lexer/Debug/
+src/main/C/Lexer/Lexer.sln
+src/main/C/Lexer/Lexer/Debug/
+src/main/C/Lexer/Lexer/Lexer.vcxproj
+src/main/C/Lexer/Lexer/Lexer.vcxproj.filters
+src/main/C/Lexer/Lexer/Release/
+src/main/C/Lexer/Lexer/output.txt
+src/main/C/Lexer/Lexer/x64/
+src/main/C/Lexer/Release/
+src/main/C/Lexer/x64/
 
 
 

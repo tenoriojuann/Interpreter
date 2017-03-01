@@ -306,7 +306,7 @@ int main(int arc, char *filename[]){
 	
 	static const struct Token Empty;
 	FILE *fp;
-	fp = fopen("C:\\Users\\Tenor\\Desktop\\Sample.in", "r");
+	fp = fopen(filename[1], "r");
 	if (fp == NULL) {
 		printf("File not created okay, error = %d\n", errno);
 		return 1;

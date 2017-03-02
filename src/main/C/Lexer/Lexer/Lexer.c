@@ -157,8 +157,11 @@ struct Token nextToken(FILE *fp) {
 			}
 			else{
 				returnedTOKEN = Empty;
+				char value = numBuffer;
 				strcpy(returnedTOKEN.token, "NUM");
-				itoa( numBuffer, returnedTOKEN.lexeme,10);
+				strncat(returnedTOKEN.lexeme, &value,1);
+				//strcpy(returnedTOKEN.lexeme,value);
+				//itoa( numBuffer, returnedTOKEN.lexeme,10);
 				return  returnedTOKEN;
 			}
 			continue;
@@ -308,7 +311,7 @@ int main(int arc, char *filename[]){
 	FILE *fp;
 	fp = fopen(filename[1], "r");
 	if (fp == NULL) {
-		printf("File not created okay, error = %d\n", errno);
+		printf("File not created okay, error");
 		return 1;
 	}
 	
@@ -322,7 +325,7 @@ int main(int arc, char *filename[]){
 		
 		fputs(out.token, output);
 		fprintf(output, " ");
-		fprintf(output, out.lexeme);
+		fprintf(output, "%s",out.lexeme);
 		fprintf(output, "\n");
 		out = nextToken(fp);
 		

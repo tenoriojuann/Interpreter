@@ -14,11 +14,13 @@ public:
 	void setToken(std::string value);
 	bool getBool();
 	std::string getLexeme();
-	bool getBool();
+	std::string getToken();
+
 
 private:
 	std::string lexeme;
 	std::string token;
 	bool closed;
+
 };
 

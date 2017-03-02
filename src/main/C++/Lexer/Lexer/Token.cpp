@@ -63,8 +63,8 @@ std::string Token::getLexeme() {
 	
 }
 
-bool Token::getBool() {
+std::string Token::getToken() {
 
-	return closed;
+	return token;
 }
 

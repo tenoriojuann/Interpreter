@@ -32,6 +32,17 @@ src/main/C/Lexer/Release/
 src/main/C/Lexer/x64/
 
 
+# C++ stuff
+
+src\main\C++\Lexer\.vs
+src\main\C++\Lexer\Debug
+src\main\C++\Lexer\Lexer.sln
+src\main\C++\Lexer\Lexer\Debug
+src\main\C++\Lexer\Lexer\Lexer.vcxproj
+src\main\C++\Lexer\Lexer\Lexer.vcxproj.filters
+
+
+
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

@@ -157,11 +157,12 @@ struct Token nextToken(FILE *fp) {
 			}
 			else{
 				returnedTOKEN = Empty;
-				char value = numBuffer;
+
 				strcpy(returnedTOKEN.token, "NUM");
-				strncat(returnedTOKEN.lexeme, &value,1);
-				//strcpy(returnedTOKEN.lexeme,value);
-				//itoa( numBuffer, returnedTOKEN.lexeme,10);
+				
+				// integer to char
+				sprintf(returnedTOKEN.lexeme, "%d", numBuffer);
+
 				return  returnedTOKEN;
 			}
 			continue;

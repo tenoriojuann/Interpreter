@@ -1,18 +1,18 @@
 #pragma once
 #include <string>
 #include "Token.h"
-
+#include <fstream>
 class Lexer {
 
 public:
 
-	Lexer(FILE *fp, char *filename[]);
+	Lexer(char *filename[]);
 	Token nextToken();
 	void Analyze(char *filename[]);
 
 private:
 
-	FILE *fp;
+	std::ifstream fp;
 
 
 

@@ -3,12 +3,11 @@
 #include "Lexer.h"
 #include <string>
 #include <iostream>
+#include <fstream>
 int main(int arc, char* filename[] ) {
 
-	FILE *fp;
 
-
-	Lexer lex(fp, filename);
+	Lexer lex(filename);
 
 
 

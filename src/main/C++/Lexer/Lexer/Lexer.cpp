@@ -20,7 +20,7 @@ Lexer::Lexer(std::string filename) {
 Token Lexer::nextToken(std::ifstream& fp) {
 	
 	int state = 1;
-	int numBuffer = 0;
+	int digit;
 	std::string alphaBuffer;
 	char ch;
 	ch = fp.get();
@@ -112,8 +112,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 			if (isdigit(ch)) {
 
-				numBuffer = 0;
-				numBuffer += static_cast<int>(ch);
+				digit = ch - '0';
 				state = 3;
 				ch = fp.get();
 			}
@@ -126,15 +125,18 @@ Token Lexer::nextToken(std::ifstream& fp) {
 		case 3:
 
 			if (isdigit(ch)) {
+				
 
-				numBuffer *= 10;
-				numBuffer += static_cast<int>(ch);
+				digit *= 10;
+				digit += ch - '0';
+				
+
 				ch = fp.get();
 			}
 
 			else {
 
-				return Token("NUM", std::to_string(numBuffer));
+				return Token("NUM", std::to_string(digit));
 
 			}
 

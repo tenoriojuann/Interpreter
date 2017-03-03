@@ -13,18 +13,18 @@
 #include <fstream>
 
 
-Lexer::Lexer(char *filename[]) {
-	fp.open(filename[1]);
+Lexer::Lexer(std::string filename) {
+	
 	Analyze(filename);
 }
 
-Token Lexer::nextToken() {
+Token Lexer::nextToken(std::ifstream& fp) {
 	
 	int state = 1;
 	int numBuffer = 0;
 	std::string alphaBuffer;
 	char ch;
-	fp >> ch;
+	ch = fp.get();
 	bool skipped = false;
 
 	while (true)
@@ -72,7 +72,7 @@ Token Lexer::nextToken() {
 			case '\f':
 			case '\r':
 			case '\t':
-				fp >> ch; // spaces can be ignored
+				ch = fp.get(); // spaces can be ignored
 
 				continue;
 
@@ -86,13 +86,13 @@ Token Lexer::nextToken() {
 
 			case '=':
 
-				fp >> ch;
+				ch = fp.get();
 				state = 6;
 				continue;
 
 			case '-':
 
-				fp >> ch;
+				ch = fp.get();
 				state = 7;
 				continue;
 
@@ -116,7 +116,7 @@ Token Lexer::nextToken() {
 				numBuffer = 0;
 				numBuffer += static_cast<int>(ch);
 				state = 3;
-				fp >> ch;
+				ch = fp.get();
 			}
 			else {
 				state = 4;
@@ -130,7 +130,7 @@ Token Lexer::nextToken() {
 
 				numBuffer *= 10;
 				numBuffer += static_cast<int>(ch);
-				fp >> ch;
+				ch = fp.get();
 			}
 
 			else {
@@ -149,7 +149,7 @@ Token Lexer::nextToken() {
 				alphaBuffer = "";
 				alphaBuffer += ch;
 				state = 5;
-				fp >> ch;
+				ch = fp.get();
 			}
 
 			else {
@@ -165,14 +165,14 @@ Token Lexer::nextToken() {
 			if (isalpha(ch) || isdigit(ch) || ch == '_') {
 
 				alphaBuffer += ch;
-				fp >> ch;
+				ch = fp.get();
 			}
 
 			else {
 
 				state = 1;
 
-				fp.putback(ch);
+				fp.unget();
 
 				if (alphaBuffer == "int" || alphaBuffer == "end" || alphaBuffer == "end" ||
 					alphaBuffer == "if" || alphaBuffer == "while") {
@@ -187,7 +187,7 @@ Token Lexer::nextToken() {
 		case 6:
 
 			if (ch == '=') {
-				fp >> ch;
+				ch = fp.get();
 				return Token("IEQ", "==");
 			}
 
@@ -198,7 +198,7 @@ Token Lexer::nextToken() {
 		case 7:
 
 			if (ch == '-') {
-				fp >> ch;
+				ch = fp.get();
 				return Token("COM", "--");
 			}
 
@@ -219,9 +219,11 @@ Token Lexer::nextToken() {
 
 }
 
-void Lexer::Analyze(char *filename[])
+void Lexer::Analyze(std::string filename)
 {
 
+	std::ifstream fp;
+	fp.open(filename);
 
 	if (fp.fail()) {
 		std::cout << ("Could not find file") << std::endl;
@@ -230,16 +232,20 @@ void Lexer::Analyze(char *filename[])
 	}
 
 	std::ofstream output("output.txt");
-
-	Token out;
-
-	while (!out.getBool()) {
+	
+	Token out(false);
+	out = nextToken(fp);
+	while (fp) {
 
 		output << out.getToken();
 		output << " ";
 		output << out.getLexeme();
 		output << std::endl;
+		out = nextToken(fp);
+
 
 	}
+
+	exit(1);
 
 }

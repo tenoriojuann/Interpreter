@@ -6,14 +6,7 @@ class Lexer {
 
 public:
 
-	Lexer(char *filename[]);
-	Token nextToken();
-	void Analyze(char *filename[]);
-
-private:
-
-	std::ifstream fp;
-
-
-
+	Lexer(std::string filename);
+	Token nextToken(std::ifstream& fp);
+	void Analyze(std::string filename);
 };

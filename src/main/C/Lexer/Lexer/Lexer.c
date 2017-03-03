@@ -19,11 +19,17 @@ struct Token nextToken(FILE *fp) {
 	static const struct Token Empty;
 	struct Token returnedTOKEN;
 
+
+	// Variables that will hold the cases,
+	// some variables will hold numbers and some char arrays
+
 	int state = 1;
 	int numBuffer = 0;
 	char alphaBuffer[10];
 	alphaBuffer[0] = '\0';
 	char ch;
+
+	// Getting a single char from the stream
 	ch = fgetc(fp);
 	bool skipped = false;
 
@@ -44,7 +50,12 @@ struct Token nextToken(FILE *fp) {
 
 
 
+
+
 		switch (state) {
+
+
+		// Finding single tokens or spaces.
 
 		case 1:
 
@@ -308,20 +319,42 @@ struct Token nextToken(FILE *fp) {
 
 int main(int arc, char *filename[]){
 	
-	static const struct Token Empty;
+
 	FILE *fp;
-	fp = fopen(filename[1], "r");
+
+	// Openning the stream
+
+	if ((sizeof(filename) / sizeof(filename[0])) > 1) {
+		fp = fopen(filename[1], "r");
+	}
+	else {
+
+		printf("Please enter the name of the file if located in this folder\n");
+		printf("Else drag the file here\n ");
+		char file[100];
+		scanf("%s",file);
+
+		fp = fopen(file, "r");
+
+	}
+	
+	
 	if (fp == NULL) {
-		printf("File not created okay, error");
+		printf("File not located\n");
 		return 1;
 	}
 	
+	// Creating the output file
 	FILE *output = fopen("output.txt", "a");
 
 
 	struct Token out;
 	out = nextToken(fp);
 	
+	// Looping until the stream reaches EOF 
+	// That will set the 'closed' variable in 
+	// the struct to true
+
 	while( !out.closed){
 		
 		fputs(out.token, output);

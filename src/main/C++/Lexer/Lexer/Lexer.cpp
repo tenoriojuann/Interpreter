@@ -1,7 +1,6 @@
 // Lexer.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
 #include "Lexer.h"
 #include "Token.h"
 #include <string>
@@ -11,7 +10,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
-
+#include <sstream>
 
 Lexer::Lexer(std::string filename) {
 	
@@ -155,7 +154,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 			else {
 				alphaBuffer = "";
 				alphaBuffer += ch;
-				return Token("INV", alphaBuffer);
+				return Token("INVALID: ", alphaBuffer);
 			}
 
 			continue;
@@ -175,7 +174,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 				fp.unget();
 
 				if (alphaBuffer == "int" || alphaBuffer == "end" || alphaBuffer == "end" ||
-					alphaBuffer == "if" || alphaBuffer == "while") {
+					alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "not") {
 					return Token("KW", alphaBuffer);
 				}
 
@@ -187,7 +186,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 		case 6:
 
 			if (ch == '=') {
-				ch = fp.get();
+				
 				return Token("IEQ", "==");
 			}
 
@@ -198,15 +197,32 @@ Token Lexer::nextToken(std::ifstream& fp) {
 		case 7:
 
 			if (ch == '-') {
+				alphaBuffer = "--";
 				ch = fp.get();
-				return Token("COM", "--");
+				state = 8;
+				
 			}
 
 			else {
 				return Token("SUB", "-");
 			}
+			continue;
 
 		case 8:
+
+			if (ch != '\n') {
+				
+				alphaBuffer += ch;
+				
+				ch = fp.get();
+			}
+			else {
+				return Token("COM", alphaBuffer);
+			}
+
+			continue;
+
+		case 9:
 
 			if (ch == '\n') {
 				state = 1;
@@ -226,7 +242,8 @@ void Lexer::Analyze(std::string filename)
 	fp.open(filename);
 
 	if (fp.fail()) {
-		std::cout << ("Could not find file") << std::endl;
+		std::cout << ("--Could not find file") << std::endl;
+		std::cout << ("--Check the path") << std::endl;
 
 		return exit(1);
 	}

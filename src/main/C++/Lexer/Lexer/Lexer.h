@@ -8,5 +8,5 @@ public:
 
 	Lexer(std::string filename);
 	Token nextToken(std::ifstream& fp);
-	void Analyze(std::string filename);
+	std::string filename;
 };

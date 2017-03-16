@@ -13,9 +13,10 @@ Token::Token(bool closed) {
 	this->closed = closed;
 }
 
-Token::Token(std::string token, std::string lexeme) {
+Token::Token(std::string token, std::string lexeme, int line) {
 	this->lexeme = lexeme;
 	this->token = token;
+	this-> line = line;
 }
 
 

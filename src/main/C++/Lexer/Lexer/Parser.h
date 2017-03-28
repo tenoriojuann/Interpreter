@@ -12,4 +12,12 @@ class Parser {
 public:
 	Parser(std::string filename);
 
+	std::list<Token> delimited(Token start, Token stop, Token separator, Token(*parser()));
+
+	Node parse_toplevel();
+
+	Node parse_if();
+
+	auto parse_atom();
+	
 };

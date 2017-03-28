@@ -9,6 +9,9 @@ Node::Node(std::string type, std::string value)
 	this->value = (std::make_pair("value", value));
 }
 
-Node::setLeft(Node left) {
-	leftChild.insert("left", left);
+void Node::setLeft(Node left) {
+	leftChild.insert(std::make_pair("left", left));
+}
+void Node::setRight(Node right) {
+	rightChild.insert(std::make_pair("right", right));
 }

@@ -14,6 +14,23 @@ public class Parser {
         ArrayList<String> tokens= new ArrayList<>();
         
    //Method that uses Scanner to take in tokens and see if exception is thrown. 
+        //counter with while loop
+        int counter=0;
+        //not sure if this works may have 
+        while (counter<tokens.length){
+            //go back and fill tokens arrayList
+            
+        }
+        /*error to check for: 
+        What is final token?
+        What follows certain operators
+        What can follow integers
+        What can follow ( and )
+        What can follow =
+        This will be easier:
+        letter, digit, =, <=, <, >=,>, ==, ~=, +, -, *, /
+        
+        */
 
     }
 

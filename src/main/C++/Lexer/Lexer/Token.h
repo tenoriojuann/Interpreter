@@ -15,7 +15,7 @@ public:
 	bool getBool();
 	std::string getLexeme();
 	std::string getToken();
-
+	int getLineNum();
 
 private:
 	std::string lexeme;

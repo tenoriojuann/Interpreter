@@ -69,3 +69,8 @@ std::string Token::getToken() {
 	return token;
 }
 
+int Token::getLineNum() {
+
+	return line;
+}
+

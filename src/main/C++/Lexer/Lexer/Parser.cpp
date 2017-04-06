@@ -11,71 +11,145 @@
 
 Parser::Parser(std::string filename)
 {
-
+	this->filename = filename;
 
 }
 
+void Parser::grabLineCode( Token tok)
+{
+	Lexer lex = Lexer(filename);
+	int LineNum = 1;
+	Token tok = lex.nextToken();
+	tokens.push_back(tok);
+	while (!tokens.back().getBool()) {
 
+		Token *tokP = &tokens.back();
 
-std::list<Token> Parser::delimited(Token start, Token stop, Token separator, Token (*parser()) ) {
-
-	std::list<Token> a;
-	bool first = true;
-	skip_punc(start);
-	while (!input.eof()) {
-
-		if (is_punc(stop)) break;
-		if (first) {
-			first = false;
+		if (tokens.back().getLexeme() == "if") {
+			foundIF();
 		}
-		else {
-			skip_punc(separator);
+		else if (tokens.back().getLexeme() == "then") {
+			foundTHEN();
 		}
-		if (is_punc(stop)) break;
-		a.push_back(parser());
+		else if (tokens.back().getLexeme() == "while") {
+			foundWHILE();
+		}
+		else if (tokens.back().getLexeme() == "end") {
+			foudnEND();
+		}
+		else if (tokens.back().getLexeme() == "=") {
+			foundEQ();
+		}
+
+
+		// Checking for new LINE
+		tokens.push_back(lex.nextToken());
+		if (tokens.back().getLineNum() > tokP->getLineNum()) {
+			newLine();
+		}
+
+	}
+
+}
+
+void Parser::newLine() {
+	//Token that belongs to the new line
+	Token tmp = tokens.back();
+	tokens.pop_back();
+
+
+	if (tokens.back().getToken() != "LP" || tokens.back().getToken() != "LC") {
+		tokens.push_back(Token("SEMI", ";", tokens.back().getLineNum()));
+	}
+	list.push_back(tokens);
+
+	// Clearing the queue for the new line of the source code
+	tokens.clear();
+	//Pushing the first token of the new line
+	tokens.push_back(tmp);
+}
+
+void Parser::foudnEND() {
+
+	Token tmp = Token("RC", "}", tokens.back().getLineNum());
+	tokens.pop_back();
+	tokens.push_back(tmp);
+
+}
+
+void Parser::foundWHILE() {
+
+	tokens.push_back(Token("LP", "(", tokens.back().getLineNum()));
+
+}
+
+void Parser::foundDO() {
+
+	tokens.pop_back();
+	tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
+	tokens.push_back(Token("LC", "{", tokens.back().getLineNum()));
+}
+
+void Parser::foundIF() {
+
+	tokens.push_back(Token("LP", "(", tokens.back().getLineNum()));
+
+}
+
+void Parser::foundTHEN() {
+
+	tokens.pop_back();
+	tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
+	tokens.push_back(Token("KW", "THEN", tokens.back().getLineNum()));
+
+}
+
+void Parser::foundCOMMA() {
+
+	if (tokens.front().getLexeme() != "local" || tokens.front().getLexeme() != "type") {
+
+		std::cout << "ERROR ON LINE:" << tokens.front().getLineNum() << ",  define kind of variable" << std::endl;
 	}
 }
 
-Node Parser::parse_toplevel() {
-	std::list<Node> prog;
-	while (!input.eof()) {
-		prog.push_back(parse_expression());
-		if (!input.eof()) skip_punc(';');
-	}
+void Parser::foundEQ() {
+	Token tmp = tokens.back();
+	tokens.pop_back();
 
-	return  Node("prog", "prog");
+	// Looping through the list checking all of the deques for the variable definition
+	if (tokens.back().getToken() == "ID") {
+		bool search = false;
+		for (int i = 0; i < list.size()-1; i++) {
+			search = ScanQUEUE(tokens.back(), list[i]);
+		}
+
+		if (!search) {
+			std::cout << "Error in line" << tokens.back().getLineNum() << " variable is not defined" << std::endl;
+		}
+
+		tokens.push_back(tmp);
+	}
 
 }
 
-Node Parser::parse_if() {
 
-	skip_kw("if");
-	auto cond = parse_expression();
-	if (!is_punc("{")) {
-		skip_kw("then");
+// Searches a deque for a specific token
+bool Parser::ScanQUEUE(Token var, std::deque<Token> deq) {
+
+
+	// found
+	if (std::find(deq.begin(), deq.end(), var.getLexeme()) != deq.end()) {
+
+		return true;
 	}
-	auto then = parse_expression();
-	Node ret("if", NULL);
-	return ret;
+
+
+	// Not found
+	return false;
 }
 
-auto Parser::parse_atom() {
-	if (is_punc("(")) {
-		input.next();
-		auto exp = parse_expression();
-		skip_punc(")");
-		return exp;
-	}
 
-	if (is_punc("{")) return parse_prog();
-	if (is_kw("if")) { auto a = parse_if(); return a; }
-	if (is_kw("true") || is_kw("false")) return parse_bool();
-	if (is_kw("lambda") || is_kw("λ")) {
-		input.next();
-		return parse_lambda();
-	}
-	var tok = input.next();
-	if (tok.type == "var" || tok.type == "num" || tok.type == "str")
-		return tok;
-	unexpected();
-}
+
+
+
+

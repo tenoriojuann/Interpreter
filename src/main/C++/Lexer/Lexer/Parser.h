@@ -1,23 +1,45 @@
 #pragma once
-#include "json.hpp"
 #include "Token.h"
 #include "Lexer.h"
 #include "Node.h"
 #include <list>
 #include "Token.h"
-#include <list>
+#include <vector>
+#include <deque>
 
 class Parser {
 
 public:
+
+	std::vector<std::deque<Token>> list;
+
+	std::string filename;
+	std::deque<Token> tokens;
+
+
+	void newLine();
+
 	Parser(std::string filename);
 
-	std::list<Token> delimited(Token start, Token stop, Token separator, Token(*parser()));
+	void grabLineCode(Token tok);
 
-	Node parse_toplevel();
+	void newLine();
 
-	Node parse_if();
+	void foudnEND();
 
-	auto parse_atom();
-	
+	void foundWHILE();
+
+	void foundDO();
+
+	void foundTHEN();
+
+	void foundCOMMA();
+
+	void foundEQ();
+
+	bool ScanQUEUE(Token var, std::deque<Token> deq);
+
+	void foundIF();
+
+
 };

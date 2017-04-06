@@ -16,7 +16,7 @@ Lexer::Lexer(std::string filename) {
 
 }
 
-Token Lexer::nextToken(std::ifstream& fp) {
+Token Lexer::nextToken() {
 	
 	int state = 1;
 	int digit;
@@ -58,11 +58,17 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 			case '{':
 
-				return Token("LB", "{", counter);
+				return Token("LC", "{", counter);
 
 			case '}':
 
-				return Token("RP", "}", counter);
+				return Token("RC", "}", counter);
+
+			case '[':
+				return Token("LB", "[", counter);
+
+			case ']':
+				return Token("RB", "]", counter);
 
 			case ' ':
 			case '\n':
@@ -176,7 +182,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 				fp.unget();
 
-				if (alphaBuffer == "int" || alphaBuffer == "end" || alphaBuffer == "end" ||
+				if (alphaBuffer == "then" || alphaBuffer == "int" || alphaBuffer == "end" || alphaBuffer == "end" ||
 					alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "not") {
 					return Token("KW", alphaBuffer,counter);
 				}

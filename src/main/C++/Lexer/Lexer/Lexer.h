@@ -7,6 +7,7 @@ class Lexer {
 public:
 
 	Lexer(std::string filename);
-	Token nextToken(std::ifstream& fp);
+	Token nextToken();
 	std::string filename;
+	std::fstream fp;
 };

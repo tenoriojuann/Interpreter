@@ -132,6 +132,99 @@ void Parser::foundEQ() {
 	}
 
 }
+void Parser::foundSM(){
+	Token tmp = tokens.back();
+	tokens.pop_back();
+	if(tokens.back().getLexeme() == "+")
+	{
+		bool search = false;
+		for (unsigned int i = 0; i < list.size()-1; i++) 
+		{
+			search = ScanQUEUE(tokens.back(), list[i]);
+		}
+		if (!search) 
+		{
+			std::cout << "Error in line" << tokens.back().getLineNum() << " variable is not defined" << std::endl;
+		}
+		tokens.push_back(tmp);
+		
+	}
+	if(tokens.front().getLexeme() != "ID" || tokens.front().getLexeme() != "NUM")
+	{
+		std::cout<<"Error, Number or ID expected at: " << tokens.back().getLineNum() << std::endl;
+	}
+}
+void Parser::foundMUL(){
+	Token tmp = tokens.back();
+	tokens.pop_back();
+	if(tokens.back().getLexeme() == "*")
+	{
+		bool search = false;
+		for (unsigned int i = 0; i < list.size()-1; i++) 
+		{
+			search = ScanQUEUE(tokens.back(), list[i]);
+		}
+		if (!search) 
+		{
+			std::cout << "Error in line" << tokens.back().getLineNum() << " variable is not defined" << std::endl;
+		}
+		tokens.push_back(tmp);
+		
+	}
+	if(tokens.front().getLexeme() != "ID" || tokens.front().getLexeme() != "NUM")
+	{
+		std::cout<<"Error, Number or ID expected at: " << tokens.back().getLineNum() << std::endl;
+	}
+	
+}
+void Parser::foundSUB(){
+	Token tmp = tokens.back();
+	tokens.pop_back();
+	if(tokens.back().getLexeme() == "-")
+	{
+		bool search = false;
+		for (unsigned int i = 0; i < list.size()-1; i++) 
+		{
+			search = ScanQUEUE(tokens.back(), list[i]);
+		}
+		if (!search) 
+		{
+			std::cout << "Error in line" << tokens.back().getLineNum() << " variable is not defined" << std::endl;
+		}
+		tokens.push_back(tmp);
+		
+	}
+	if(tokens.front().getLexeme() != "ID" || tokens.front().getLexeme() != "NUM")
+	{
+		std::cout<<"Error, Number or ID expected at: " << tokens.back().getLineNum() << std::endl;
+	}
+	
+}
+void Parser::foundDIV(){
+	Token tmp = tokens.back();
+	tokens.pop_back();
+	if(tokens.back().getLexeme() == "/")
+	{
+		bool search = false;
+		for (unsigned int i = 0; i < list.size()-1; i++) 
+		{
+			search = ScanQUEUE(tokens.back(), list[i]);
+		}
+		if (!search) 
+		{
+			std::cout << "Error in line" << tokens.back().getLineNum() << " variable is not defined" << std::endl;
+		}
+		tokens.push_back(tmp);
+		
+	}
+	if(tokens.front().getLexeme() != "ID" || tokens.front().getLexeme() != "NUM")
+	{
+		std::cout<<"Error, Number or ID expected at: " << tokens.back().getLineNum() << std::endl;
+	}
+	
+}
+
+
 
 
 // Searches a deque for a specific token

@@ -20,16 +20,18 @@ Parser::Parser(std::string filename)
 
 void Parser::grabLineCode()
 {
+	
 	Lexer lex = Lexer(filename);
 	int LineNum = 1;
 	Token tok = lex.nextToken();
 	tokens.push_back(tok);
-	while (!tokens.back().getBool()) {
+	while (lex.fp.is_open()) {
 
-		Token *tokP = &tokens.back();
-
+		
+		
 		if (tokens.back().getLexeme() == "if") {
 			foundIF();
+			
 		}
 		else if (tokens.back().getLexeme() == "then") {
 			foundTHEN();
@@ -41,15 +43,18 @@ void Parser::grabLineCode()
 			foudnEND();
 		}
 		else if (tokens.back().getLexeme() == "=") {
-			foundEQ();
+			//foundEQ();
 		}
 
 
+		
 		// Checking for new LINE
-		tokens.push_back(lex.nextToken());
-		if (tokens.back().getLineNum() > tokP->getLineNum()) {
+		 tok = lex.nextToken();
+		if (tokens.back().getLineNum() < tok.getLineNum()) {
+			tokens.push_back(tok);
 			newLine();
 		}
+
 
 	}
 
@@ -60,17 +65,44 @@ void Parser::newLine() {
 	Token tmp = tokens.back();
 	tokens.pop_back();
 
+	if (tmp.getToken() == "ID" || tmp.getToken() == "LP") {
+		tokens.push_back(tmp);
+		list.push_back(tokens);
 
-	if (tokens.back().getToken() != "LP" || tokens.back().getToken() != "LC") {
-		tokens.push_back(Token("SEMI", ";", tokens.back().getLineNum()));
+		// Clearing the queue for the new line of the source code
+		tokens.clear();
+
+	
 	}
-	list.push_back(tokens);
 
-	// Clearing the queue for the new line of the source code
-	tokens.clear();
-	//Pushing the first token of the new line
-	tokens.push_back(tmp);
+
+	else if ((tokens.front().getLexeme() == "if" || tokens.front().getLexeme() == "while")) {
+		tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
+		tokens.push_back(Token("LC", "{", tokens.back().getLineNum()));
+		list.push_back(tokens);
+
+		// Clearing the queue for the new line of the source code
+		tokens.clear();
+		//Pushing the first token of the new line
+		tokens.push_back(tmp);
+
+	}
+
+
+	else if (tokens.back().getToken() != "LP" && tokens.back().getToken() != "LC" && tokens.back().getToken() != "RP") {
+		tokens.push_back(Token("SEMI", ";", tokens.back().getLineNum()));
+		list.push_back(tokens);
+
+		// Clearing the queue for the new line of the source code
+		tokens.clear();
+		//Pushing the first token of the new line
+		tokens.push_back(tmp);
+
+	}
 }
+	
+	
+
 
 void Parser::foudnEND() {
 
@@ -116,13 +148,13 @@ void Parser::foundCOMMA() {
 }
 
 void Parser::foundEQ() {
-	Token tmp = tokens.back();
-	tokens.pop_back();
+
 
 	// Looping through the list checking all of the deques for the variable definition
-	if (tokens.back().getToken() == "ID") {
 		bool search = false;
+
 		for (int i = 0; i < list.size()-1; i++) {
+
 			search = ScanQUEUE(tokens.back(), list[i]);
 		}
 
@@ -130,8 +162,7 @@ void Parser::foundEQ() {
 			std::cout << "Error in line" << tokens.back().getLineNum() << " variable is not defined" << std::endl;
 		}
 
-		tokens.push_back(tmp);
-	}
+
 
 }
 void Parser::foundSM(){
@@ -240,6 +271,7 @@ bool Parser::ScanQUEUE(Token var, std::deque<Token> deq) {
 		deq.end(),
 		[&lx = var]( Token& x) -> bool {return lx.getLexeme() == x.getLexeme(); });
 	
+	return false;
 }
 
 

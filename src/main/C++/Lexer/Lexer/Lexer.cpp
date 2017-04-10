@@ -14,6 +14,7 @@
 
 Lexer::Lexer(std::string filename) {
 	this->filename = filename;
+	fp.open(filename);
 }
 
 Token Lexer::nextToken() {
@@ -24,7 +25,6 @@ Token Lexer::nextToken() {
 	char ch;
 	ch = fp.get();
 	bool skipped = false;
-	int counter = 1;
 	while (true)
 	{
 
@@ -72,14 +72,12 @@ Token Lexer::nextToken() {
 
 			case ' ':
 			case '\n':
-				counter++;
-				continue;
 			case '\b':
 			case '\f':
 			case '\r':
 			case '\t':
 				ch = fp.get(); // spaces can be ignored
-
+				counter++;
 				continue;
 
 			case '.':
@@ -182,7 +180,7 @@ Token Lexer::nextToken() {
 
 				fp.unget();
 
-				if (alphaBuffer == "then" || alphaBuffer == "int" || alphaBuffer == "end" || alphaBuffer == "end" ||
+				if (alphaBuffer == "then" || alphaBuffer == "type" || alphaBuffer == "local" || alphaBuffer == "end" ||
 					alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "not") {
 					return Token("KW", alphaBuffer,counter);
 				}

@@ -7,10 +7,19 @@
 int main(int arc, char* filename[] ) {
 
 
-	Parser par(filename[1]);
+	if (arc > 1) {
+		Parser par(filename[1]);
+		par.grabLineCode();
 
+		par.printT();
+	}
 
+	else {
+		Parser par("Sample.lua");
+		par.grabLineCode();
 
+		par.printT();
+	}
 
 
 	return 0;

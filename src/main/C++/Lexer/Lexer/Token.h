@@ -21,7 +21,7 @@ private:
 	std::string lexeme;
 	std::string token;
 	int line;
-	bool closed;
+	bool closed = false;
 
 };
 

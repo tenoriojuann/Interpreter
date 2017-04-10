@@ -10,7 +10,7 @@ class Parser {
 
 public:
 
-	std::vector<std::deque<Token> > list;
+
 
 	std::vector<std::deque<Token>> list;
 	std::string filename;

@@ -16,7 +16,7 @@ Token::Token(bool closed) {
 Token::Token(std::string token, std::string lexeme, int line) {
 	this->lexeme = lexeme;
 	this->token = token;
-	this-> line = line;
+	this->line = line;
 }
 
 

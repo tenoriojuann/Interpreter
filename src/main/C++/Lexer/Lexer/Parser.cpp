@@ -6,6 +6,8 @@
 #include <iostream>	
 #include <map>
 #include <algorithm>
+#include <vector>
+#include <deque>
 
 
 
@@ -237,21 +239,22 @@ bool Parser::ScanQUEUE(Token var, std::deque<Token> deq) {
 	std::find_if(deq.begin(),
 		deq.end(),
 		[&lx = var]( Token& x) -> bool {return lx.getLexeme() == x.getLexeme(); });
-
+	
 }
-void printT(std::vector<Token> h) 
+
+
+void Parser::printT() 
 {
-	for (int i = 0; i<h.size(); i++) 
+	// For every queue in the list
+	for (std::vector<std::deque<Token>>::iterator queue = list.begin(); queue < list.end(); queue++)
 	{
-		// to move through list. 		
-		for(int j=h[i].size();j>=0; j--) 		
+		// for every token in the queue 		
+		for(std::deque<Token>::iterator it=(*queue).begin(); it < (*queue).end(); it++)
 		{ 			
-			std::cout<<list[i]tokens[j].getLexeme() + " ">>std::end; 		
-		} 		std::cout<< " "<<std::endl; 	
+			// print the lexeme
+			std::cout<< (*it).getLexeme() << " "; 		
+		} 	
+
+		std::cout<<std::endl;
 	}
 }
-
-
-
-
-

@@ -43,9 +43,14 @@ void Parser::grabLineCode()
 			foudnEND();
 		}
 		else if (tokens.back().getLexeme() == "=") {
-			//foundEQ();
+			foundEQ();
 		}
-
+		else if (tokens.back().getToken() == "COM") {
+			foundCOMMENT();
+		}
+		else if (tokens.back().getToken() == "ID") {
+			foundID();
+		}
 
 		
 		// Checking for new LINE
@@ -53,6 +58,9 @@ void Parser::grabLineCode()
 		if (tokens.back().getLineNum() < tok.getLineNum()) {
 			tokens.push_back(tok);
 			newLine();
+		}
+		else {
+			tokens.push_back(tok);
 		}
 
 
@@ -65,18 +73,8 @@ void Parser::newLine() {
 	Token tmp = tokens.back();
 	tokens.pop_back();
 
-	if (tmp.getToken() == "ID" || tmp.getToken() == "LP") {
-		tokens.push_back(tmp);
-		list.push_back(tokens);
 
-		// Clearing the queue for the new line of the source code
-		tokens.clear();
-
-	
-	}
-
-
-	else if ((tokens.front().getLexeme() == "if" || tokens.front().getLexeme() == "while")) {
+	 if ((tokens.front().getLexeme() == "while")) {
 		tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
 		tokens.push_back(Token("LC", "{", tokens.back().getLineNum()));
 		list.push_back(tokens);
@@ -87,9 +85,13 @@ void Parser::newLine() {
 		tokens.push_back(tmp);
 
 	}
-
+	
+	else if (tmp.getLexeme() == "end") {
+		foudnEND();
+	}
 
 	else if (tokens.back().getToken() != "LP" && tokens.back().getToken() != "LC" && tokens.back().getToken() != "RP") {
+		
 		tokens.push_back(Token("SEMI", ";", tokens.back().getLineNum()));
 		list.push_back(tokens);
 
@@ -99,15 +101,36 @@ void Parser::newLine() {
 		tokens.push_back(tmp);
 
 	}
+
 }
 	
+void Parser::foundCOMMENT() {
 	
+	Token tmp = tokens.back();
+	tokens.pop_back();
+
+
+	std::string st = tmp.getLexeme();
+
+	st.erase(0, 2);
+
+	st.insert(0, "/");
+	st.insert(0, "/");
+	tmp.setLexeme(st);
+
+	tokens.push_back(tmp);
+}
 
 
 void Parser::foudnEND() {
 
 	Token tmp = Token("RC", "}", tokens.back().getLineNum());
-	tokens.pop_back();
+	if (tokens.back().getLexeme() == "end") {
+
+		tokens.pop_back();
+	}
+	list.push_back(tokens);
+	tokens.clear();
 	tokens.push_back(tmp);
 
 }
@@ -133,9 +156,10 @@ void Parser::foundIF() {
 
 void Parser::foundTHEN() {
 
+	Token tmp = tokens.back();
 	tokens.pop_back();
-	tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
-	tokens.push_back(Token("RC", "{", tokens.back().getLineNum()));
+	tokens.push_back(Token("RP", ")", tmp.getLineNum()));
+	tokens.push_back(Token("LC", "{", tmp.getLineNum()));
 
 }
 
@@ -151,20 +175,34 @@ void Parser::foundEQ() {
 
 
 	// Looping through the list checking all of the deques for the variable definition
-		bool search = false;
-
-		for (int i = 0; i < list.size()-1; i++) {
-
-			search = ScanQUEUE(tokens.back(), list[i]);
-		}
-
-		if (!search) {
-			std::cout << "Error in line" << tokens.back().getLineNum() << " variable is not defined" << std::endl;
-		}
 
 
 
 }
+
+
+void Parser::foundID() {
+
+
+	bool search = false;
+
+	if (tokens.front().getLexeme() == "type") return;
+
+	else {
+		for (int i = 0; i < list.size(); i++) {
+
+			search = ScanQUEUE(tokens.back().getLexeme(), list[i]);
+		}
+
+		if (!search) {
+			std::cout << "Error in line " << tokens.back().getLineNum() << " variable is not defined " << tokens.back().getLexeme() << std::endl;
+		}
+	}
+
+
+
+}
+
 void Parser::foundSM(){
 	Token tmp = tokens.back();
 	tokens.pop_back();
@@ -173,12 +211,14 @@ void Parser::foundSM(){
 		bool search = false;
 		for (unsigned int i = 0; i < list.size()-1; i++) 
 		{
-			search = ScanQUEUE(tokens.back(), list[i]);
+			search = ScanQUEUE("+", list[i]);
 		}
 		if (!search) 
 		{
 			std::cout << "Error in line" << tokens.back().getLineNum() << " variable is not defined" << std::endl;
 		}
+
+
 		tokens.push_back(tmp);
 		
 	}
@@ -195,7 +235,7 @@ void Parser::foundMUL(){
 		bool search = false;
 		for (unsigned int i = 0; i < list.size()-1; i++) 
 		{
-			search = ScanQUEUE(tokens.back(), list[i]);
+			search = ScanQUEUE(tokens.back().getLexeme(), list[i]);
 		}
 		if (!search) 
 		{
@@ -218,7 +258,7 @@ void Parser::foundSUB(){
 		bool search = false;
 		for (unsigned int i = 0; i < list.size()-1; i++) 
 		{
-			search = ScanQUEUE(tokens.back(), list[i]);
+			search = ScanQUEUE("-", list[i]);
 		}
 		if (!search) 
 		{
@@ -241,7 +281,7 @@ void Parser::foundDIV(){
 		bool search = false;
 		for (unsigned int i = 0; i < list.size()-1; i++) 
 		{
-			search = ScanQUEUE(tokens.back(), list[i]);
+			search = ScanQUEUE("/", list[i]);
 		}
 		if (!search) 
 		{
@@ -261,17 +301,20 @@ void Parser::foundDIV(){
 
 
 // Searches a deque for a specific token
-bool Parser::ScanQUEUE(Token var, std::deque<Token> deq) {
+bool Parser::ScanQUEUE(std::string var, std::deque<Token> &deq) {
 
 
 	// using a lambda function to search the 
 	// since we are searching a list of deques of tokens
 	// and looking for a specific string
-	std::find_if(deq.begin(),
-		deq.end(),
-		[&lx = var]( Token& x) -> bool {return lx.getLexeme() == x.getLexeme(); });
-	
-	return false;
+
+
+	auto pred = [var]( Token & item) {
+		return item.getLexeme() == var;
+	};
+	auto x = std::find_if(deq.begin(), deq.end(), pred) != deq.end();
+
+	return x;
 }
 
 

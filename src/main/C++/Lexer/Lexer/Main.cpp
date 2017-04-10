@@ -21,6 +21,7 @@ int main(int arc, char* filename[] ) {
 		par.printT();
 	}
 
-
+	int exit;
+	std::cin >> exit;
 	return 0;
 }

@@ -17,6 +17,7 @@ public:
 	std::deque<Token> tokens;
 
 	void newLine();
+	void foundCOMMENT();
 	Parser(std::string filename);
 	void grabLineCode();
 	void foudnEND();
@@ -25,10 +26,11 @@ public:
 	void foundTHEN();
 	void foundCOMMA();
 	void foundEQ();
-	bool ScanQUEUE(Token var, std::deque<Token> deq);
+	bool ScanQUEUE(std::string var, std::deque<Token> &deq);
 
 	void printT();
 	void foundIF();
+	void foundID();
 	void foundSM();
 	void foundDIV();
 	void foundSUB();

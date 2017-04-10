@@ -12,9 +12,13 @@
 #include <fstream>
 #include <sstream>
 
+
+int Lexer::counter = 1;
+
 Lexer::Lexer(std::string filename) {
 	this->filename = filename;
 	fp.open(filename);
+	
 }
 
 Token Lexer::nextToken() {
@@ -36,7 +40,6 @@ Token Lexer::nextToken() {
 
 			fp.close();
 
-			return Token(true);
 
 		}
 
@@ -70,14 +73,18 @@ Token Lexer::nextToken() {
 			case ']':
 				return Token("RB", "]", counter);
 
-			case ' ':
+
 			case '\n':
+				ch = fp.get(); // spaces can be ignored
+				counter++;
+				continue;
 			case '\b':
 			case '\f':
 			case '\r':
 			case '\t':
+			case ' ':
 				ch = fp.get(); // spaces can be ignored
-				counter++;
+				
 				continue;
 
 			case '.':

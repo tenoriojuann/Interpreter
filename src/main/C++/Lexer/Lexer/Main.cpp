@@ -7,7 +7,7 @@
 int main(int arc, char* filename[] ) {
 
 
-	Lexer lex(filename[1]);
+	Parser par(filename[1]);
 
 
 

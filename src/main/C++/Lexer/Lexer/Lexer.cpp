@@ -13,11 +13,10 @@
 #include <sstream>
 
 Lexer::Lexer(std::string filename) {
-	
-	Analyze(filename);
+	this->filename = filename;
 }
 
-Token Lexer::nextToken(std::ifstream& fp) {
+Token Lexer::nextToken() {
 	
 	int state = 1;
 	int digit;
@@ -25,7 +24,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 	char ch;
 	ch = fp.get();
 	bool skipped = false;
-
+	int counter = 1;
 	while (true)
 	{
 
@@ -51,22 +50,30 @@ Token Lexer::nextToken(std::ifstream& fp) {
 			{
 			case '(':
 
-				return Token("LP", "(");
+				return Token("LP", "(", counter);
 
 			case ')':
 
-				return Token("RP", ")");
+				return Token("RP", ")", counter);
 
 			case '{':
 
-				return Token("LB", "{");
+				return Token("LC", "{", counter);
 
 			case '}':
 
-				return Token("RP", "}");
+				return Token("RC", "}", counter);
+
+			case '[':
+				return Token("LB", "[", counter);
+
+			case ']':
+				return Token("RB", "]", counter);
 
 			case ' ':
 			case '\n':
+				counter++;
+				continue;
 			case '\b':
 			case '\f':
 			case '\r':
@@ -77,11 +84,11 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 			case '.':
 
-				return Token("PD", ".");
+				return Token("PD", ".", counter);
 
 			case '+':
 
-				return Token("SM", "+");
+				return Token("SM", "+",counter);
 
 			case '=':
 
@@ -97,11 +104,11 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 			case '*':
 
-				return Token("MUL", "*");
+				return Token("MUL", "*",counter);
 
 			case '/':
 
-				return Token("DIV", "/");
+				return Token("DIV", "/",counter);
 
 			default:
 				state = 2;
@@ -136,7 +143,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 			else {
 
-				return Token("NUM", std::to_string(digit));
+				return Token("NUM", std::to_string(digit),counter);
 
 			}
 
@@ -156,7 +163,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 			else {
 				alphaBuffer = "";
 				alphaBuffer += ch;
-				return Token("INVALID: ", alphaBuffer);
+				return Token("INVALID: ", alphaBuffer,counter);
 			}
 
 			continue;
@@ -175,12 +182,12 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 				fp.unget();
 
-				if (alphaBuffer == "int" || alphaBuffer == "end" || alphaBuffer == "end" ||
+				if (alphaBuffer == "then" || alphaBuffer == "int" || alphaBuffer == "end" || alphaBuffer == "end" ||
 					alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "not") {
-					return Token("KW", alphaBuffer);
+					return Token("KW", alphaBuffer,counter);
 				}
 
-				return Token("ID", alphaBuffer);
+				return Token("ID", alphaBuffer,counter);
 			}
 
 			continue;
@@ -189,11 +196,11 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 			if (ch == '=') {
 				
-				return Token("IEQ", "==");
+				return Token("IEQ", "==",counter);
 			}
 
 			else {
-				return Token("EQ", "=");
+				return Token("EQ", "=",counter);
 			}
 
 		case 7:
@@ -206,7 +213,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 			}
 
 			else {
-				return Token("SUB", "-");
+				return Token("SUB", "-",counter);
 			}
 			continue;
 
@@ -219,7 +226,7 @@ Token Lexer::nextToken(std::ifstream& fp) {
 				ch = fp.get();
 			}
 			else {
-				return Token("COM", alphaBuffer);
+				return Token("COM", alphaBuffer,counter);
 			}
 
 			continue;
@@ -237,34 +244,3 @@ Token Lexer::nextToken(std::ifstream& fp) {
 
 }
 
-void Lexer::Analyze(std::string filename)
-{
-
-	std::ifstream fp;
-	fp.open(filename);
-
-	if (fp.fail()) {
-		std::cout << ("--Could not find file") << std::endl;
-		std::cout << ("--Check the path") << std::endl;
-
-		return exit(1);
-	}
-
-	std::ofstream output("output.txt");
-	
-	Token out(false);
-	out = nextToken(fp);
-	while (fp) {
-
-		output << out.getToken();
-		output << " ";
-		output << out.getLexeme();
-		output << std::endl;
-		out = nextToken(fp);
-
-
-	}
-
-	exit(1);
-
-}

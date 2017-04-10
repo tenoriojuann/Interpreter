@@ -1,7 +1,6 @@
 #pragma once
 #include "Token.h"
 #include "Lexer.h"
-#include "Node.h"
 #include <list>
 #include "Token.h"
 #include <vector>
@@ -11,7 +10,7 @@ class Parser {
 
 public:
 
-	std::vector<std::deque<Token> > list;
+	std::vector<std::deque<Token>> list;
 	std::string filename;
 	std::deque<Token> tokens;
 
@@ -25,6 +24,7 @@ public:
 	void foundCOMMA();
 	void foundEQ();
 	bool ScanQUEUE(Token var, std::deque<Token> deq);
+	void printT();
 	void foundIF();
 	void foundSM();
 	void foundDIV();

@@ -101,7 +101,7 @@ void Parser::foundTHEN() {
 
 	tokens.pop_back();
 	tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
-	tokens.push_back(Token("KW", "THEN", tokens.back().getLineNum()));
+	tokens.push_back(Token("RC", "{", tokens.back().getLineNum()));
 
 }
 

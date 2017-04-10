@@ -239,7 +239,17 @@ bool Parser::ScanQUEUE(Token var, std::deque<Token> deq) {
 		[&lx = var]( Token& x) -> bool {return lx.getLexeme() == x.getLexeme(); });
 
 }
-
+void printT(std::vector<Token> h) 
+{
+	for (int i = 0; i<h.size(); i++) 
+	{
+		// to move through list. 		
+		for(int j=h[i].size();j>=0; j--) 		
+		{ 			
+			std::cout<<list[i]tokens[j].getLexeme() + " ">>std::end; 		
+		} 		std::cout<< " "<<std::endl; 	
+	}
+}
 
 
 

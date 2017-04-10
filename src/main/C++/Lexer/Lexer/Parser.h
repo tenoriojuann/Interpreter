@@ -3,7 +3,6 @@
 #include "Lexer.h"
 #include "Node.h"
 #include <list>
-#include "Token.h"
 #include <vector>
 #include <deque>
 
@@ -21,9 +20,7 @@ public:
 
 	Parser(std::string filename);
 
-	void grabLineCode(Token tok);
-
-	void newLine();
+	void grabLineCode();
 
 	void foudnEND();
 

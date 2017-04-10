@@ -13,7 +13,7 @@
 #include <sstream>
 
 Lexer::Lexer(std::string filename) {
-
+	this->filename = filename;
 }
 
 Token Lexer::nextToken() {

@@ -1,11 +1,12 @@
 ﻿#include "Parser.h"
 #include "Lexer.h"
 #include "Token.h"
-#include "Node.h"
 #include <string>
 #include <list>
 #include <iostream>	
 #include <map>
+#include <algorithm>
+
 
 
 
@@ -15,7 +16,7 @@ Parser::Parser(std::string filename)
 
 }
 
-void Parser::grabLineCode( Token tok)
+void Parser::grabLineCode()
 {
 	Lexer lex = Lexer(filename);
 	int LineNum = 1;
@@ -137,15 +138,13 @@ void Parser::foundEQ() {
 bool Parser::ScanQUEUE(Token var, std::deque<Token> deq) {
 
 
-	// found
-	if (std::find(deq.begin(), deq.end(), var.getLexeme()) != deq.end()) {
+	// using a lambda function to search the 
+	// since we are searching a list of deques of tokens
+	// and looking for a specific string
+	std::find_if(deq.begin(),
+		deq.end(),
+		[&lx = var]( Token& x) -> bool {return lx.getLexeme() == x.getLexeme(); });
 
-		return true;
-	}
-
-
-	// Not found
-	return false;
 }
 
 

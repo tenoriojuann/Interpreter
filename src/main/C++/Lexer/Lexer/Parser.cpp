@@ -192,8 +192,12 @@ void Parser::foundID() {
 
 	bool search = false;
 
-	if (tokens.front().getLexeme() == "type") return;
-
+	if (tokens.front().getLexeme() == "type") {
+		
+		tokens.front().setLexeme("auto");
+		
+		return;
+	}
 	else {
 		for (int i = 0; i < list.size(); i++) {
 

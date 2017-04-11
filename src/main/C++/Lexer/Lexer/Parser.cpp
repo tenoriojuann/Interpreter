@@ -21,7 +21,7 @@ Parser::Parser(std::string filename)
 void Parser::grabLineCode()
 {
 	
-	Lexer lex = Lexer(filename);
+	Lexer lex(filename);
 	int LineNum = 1;
 	Token tok = lex.nextToken();
 	tokens.push_back(tok);
@@ -45,9 +45,7 @@ void Parser::grabLineCode()
 		else if (tokens.back().getLexeme() == "=") {
 			foundEQ();
 		}
-		else if (tokens.back().getToken() == "COM") {
-			foundCOMMENT();
-		}
+
 		else if (tokens.back().getToken() == "ID") {
 			foundID();
 		}
@@ -74,6 +72,7 @@ void Parser::newLine() {
 	tokens.pop_back();
 
 
+
 	 if ((tokens.front().getLexeme() == "while")) {
 		tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
 		tokens.push_back(Token("LC", "{", tokens.back().getLineNum()));
@@ -89,7 +88,16 @@ void Parser::newLine() {
 	else if (tmp.getLexeme() == "end") {
 		foudnEND();
 	}
-
+	else if (tmp.getLexeme() == "if") {
+		tokens.clear();
+		tokens.push_back(tmp);
+		foundIF();
+	}
+	else if (tmp.getToken() == "COM") {
+		tokens.clear();
+		tokens.push_back(tmp);
+		foundCOMMENT();
+	}
 	else if (tokens.back().getToken() != "LP" && tokens.back().getToken() != "LC" && tokens.back().getToken() != "RP") {
 		
 		tokens.push_back(Token("SEMI", ";", tokens.back().getLineNum()));
@@ -111,13 +119,10 @@ void Parser::foundCOMMENT() {
 
 
 	std::string st = tmp.getLexeme();
-
 	st.erase(0, 2);
-
-	st.insert(0, "/");
-	st.insert(0, "/");
-	tmp.setLexeme(st);
-
+	std::string cm = "   //";
+	cm += st;
+	tmp.setLexeme(cm);
 	tokens.push_back(tmp);
 }
 
@@ -160,6 +165,7 @@ void Parser::foundTHEN() {
 	tokens.pop_back();
 	tokens.push_back(Token("RP", ")", tmp.getLineNum()));
 	tokens.push_back(Token("LC", "{", tmp.getLineNum()));
+	list.push_back(tokens);
 
 }
 
@@ -174,7 +180,7 @@ void Parser::foundCOMMA() {
 void Parser::foundEQ() {
 
 
-	// Looping through the list checking all of the deques for the variable definition
+	//
 
 
 
@@ -195,7 +201,7 @@ void Parser::foundID() {
 		}
 
 		if (!search) {
-			std::cout << "Error in line " << tokens.back().getLineNum() << " variable is not defined " << tokens.back().getLexeme() << std::endl;
+			std::cout << "Error in line " << tokens.back().getLineNum() << ": variable '" << tokens.back().getLexeme() << "' is not defined" << std::endl;
 		}
 	}
 

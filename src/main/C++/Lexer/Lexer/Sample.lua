@@ -1,6 +1,6 @@
 type a
-while a = b
-	if a / 5 = c then
+while a == b
+	if c == a/5 then
 	--trying
 	end
 end

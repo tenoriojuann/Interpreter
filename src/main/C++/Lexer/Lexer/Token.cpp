@@ -2,7 +2,14 @@
 #include <string>
 
 
+/*
 
+Professor: Jose M Garrido
+Class: Concepts of Programming Langugaes
+Groupd Members: Juan E Tenorio Arzola, Andrew Shatz, Thomas Nguyen
+Project: 2nd Deliverable
+
+*/
 
 
 Token::Token() {

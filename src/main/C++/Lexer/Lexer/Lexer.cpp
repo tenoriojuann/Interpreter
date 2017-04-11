@@ -1,6 +1,11 @@
-// Lexer.cpp : Defines the entry point for the console application.
-//
+/*
 
+Professor: Jose M Garrido
+Class: Concepts of Programming Langugaes
+Groupd Members: Juan E Tenorio Arzola, Andrew Shatz, Thomas Nguyen
+Project: 2nd Deliverable
+
+*/
 #include "Lexer.h"
 #include "Token.h"
 #include <string>
@@ -188,7 +193,7 @@ Token Lexer::nextToken() {
 				fp.unget();
 
 				if (alphaBuffer == "then" || alphaBuffer == "type" || alphaBuffer == "local" || alphaBuffer == "end" ||
-					alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "not") {
+					alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "not" || alphaBuffer == "do") {
 					return Token("KW", alphaBuffer,counter);
 				}
 

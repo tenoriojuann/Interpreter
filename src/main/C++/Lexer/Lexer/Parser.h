@@ -25,7 +25,7 @@ public:
 	void foundDO();
 	void foundTHEN();
 	void foundCOMMA();
-	void foundEQ();
+
 	bool ScanQUEUE(std::string var, std::deque<Token> &deq);
 
 	void printT();

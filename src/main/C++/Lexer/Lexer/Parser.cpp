@@ -9,7 +9,14 @@
 #include <vector>
 #include <deque>
 
+/*
 
+Professor: Jose M Garrido
+Class: Concepts of Programming Langugaes
+Groupd Members: Juan E Tenorio Arzola, Andrew Shatz, Thomas Nguyen
+Project: 2nd Deliverable
+
+*/
 
 
 Parser::Parser(std::string filename)
@@ -17,6 +24,12 @@ Parser::Parser(std::string filename)
 	this->filename = filename;
 
 }
+
+
+// This function will keep receiving the tokens
+// until the stream closes
+// it also calls the appropiate function
+// for a received token
 
 void Parser::grabLineCode()
 {
@@ -39,12 +52,13 @@ void Parser::grabLineCode()
 		else if (tokens.back().getLexeme() == "while") {
 			foundWHILE();
 		}
+		else if (tokens.back().getLexeme() == "do") {
+			foundDO();
+		}
 		else if (tokens.back().getLexeme() == "end") {
 			foudnEND();
 		}
-		else if (tokens.back().getLexeme() == "=") {
-			foundEQ();
-		}
+
 
 		else if (tokens.back().getToken() == "ID") {
 			foundID();
@@ -73,22 +87,17 @@ void Parser::newLine() {
 
 
 
-	 if ((tokens.front().getLexeme() == "while")) {
-		tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
-		tokens.push_back(Token("LC", "{", tokens.back().getLineNum()));
-		list.push_back(tokens);
-
-		// Clearing the queue for the new line of the source code
-		tokens.clear();
-		//Pushing the first token of the new line
-		tokens.push_back(tmp);
-
-	}
 	
-	else if (tmp.getLexeme() == "end") {
+	 // checking special cases 
+	if (tmp.getLexeme() == "end") {
+		tokens.push_back(tmp);
 		foudnEND();
 	}
+	else if (tmp.getLexeme() == "do") {
+		foundDO();
+	}
 	else if (tmp.getLexeme() == "if") {
+		list.push_back(tokens);
 		tokens.clear();
 		tokens.push_back(tmp);
 		foundIF();
@@ -98,6 +107,8 @@ void Parser::newLine() {
 		tokens.push_back(tmp);
 		foundCOMMENT();
 	}
+
+	// making sure there are no open/closed parenthesis or curly brackets
 	else if (tokens.back().getToken() != "LP" && tokens.back().getToken() != "LC" && tokens.back().getToken() != "RP") {
 		
 		tokens.push_back(Token("SEMI", ";", tokens.back().getLineNum()));
@@ -112,6 +123,7 @@ void Parser::newLine() {
 
 }
 	
+// function for when a comment is found
 void Parser::foundCOMMENT() {
 	
 	Token tmp = tokens.back();
@@ -120,13 +132,13 @@ void Parser::foundCOMMENT() {
 
 	std::string st = tmp.getLexeme();
 	st.erase(0, 2);
-	std::string cm = "   //";
+	std::string cm = "\t//";
 	cm += st;
 	tmp.setLexeme(cm);
 	tokens.push_back(tmp);
 }
 
-
+// function for when an END is found
 void Parser::foudnEND() {
 
 	Token tmp = Token("RC", "}", tokens.back().getLineNum());
@@ -140,25 +152,29 @@ void Parser::foudnEND() {
 
 }
 
+// function for when a  while loop is found
 void Parser::foundWHILE() {
 
 	tokens.push_back(Token("LP", "(", tokens.back().getLineNum()));
 
 }
 
+// function for when a DO is found
 void Parser::foundDO() {
 
 	tokens.pop_back();
 	tokens.push_back(Token("RP", ")", tokens.back().getLineNum()));
 	tokens.push_back(Token("LC", "{", tokens.back().getLineNum()));
+
 }
 
+// function for when an IF is found
 void Parser::foundIF() {
 
 	tokens.push_back(Token("LP", "(", tokens.back().getLineNum()));
 
 }
-
+// function for when an THEN is found
 void Parser::foundTHEN() {
 
 	Token tmp = tokens.back();
@@ -169,6 +185,7 @@ void Parser::foundTHEN() {
 
 }
 
+// function for when an comma is found
 void Parser::foundCOMMA() {
 
 	if (tokens.front().getLexeme() != "local" || tokens.front().getLexeme() != "type") {
@@ -177,16 +194,9 @@ void Parser::foundCOMMA() {
 	}
 }
 
-void Parser::foundEQ() {
 
 
-	//
-
-
-
-}
-
-
+// function for when an variable is found
 void Parser::foundID() {
 
 
@@ -198,12 +208,15 @@ void Parser::foundID() {
 		
 		return;
 	}
+
+	// performing the search if the defition of the variable is not within the same line
 	else {
 		for (int i = 0; i < list.size(); i++) {
 
 			search = ScanQUEUE(tokens.back().getLexeme(), list[i]);
 		}
 
+		// Throw an error if the search return false
 		if (!search) {
 			std::cout << "Error in line " << tokens.back().getLineNum() << ": variable '" << tokens.back().getLexeme() << "' is not defined" << std::endl;
 		}
@@ -283,6 +296,8 @@ void Parser::foundSUB(){
 	}
 	
 }
+
+
 void Parser::foundDIV(){
 	Token tmp = tokens.back();
 	tokens.pop_back();

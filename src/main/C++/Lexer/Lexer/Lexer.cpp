@@ -1,6 +1,11 @@
-// Lexer.cpp : Defines the entry point for the console application.
-//
+/*
 
+Professor: Jose M Garrido
+Class: Concepts of Programming Langugaes
+Groupd Members: Juan E Tenorio Arzola, Andrew Shatz, Thomas Nguyen
+Project: 2nd Deliverable
+
+*/
 #include "Lexer.h"
 #include "Token.h"
 #include <string>
@@ -12,8 +17,13 @@
 #include <fstream>
 #include <sstream>
 
+
+int Lexer::counter = 1;
+
 Lexer::Lexer(std::string filename) {
 	this->filename = filename;
+	fp.open(filename);
+	
 }
 
 Token Lexer::nextToken() {
@@ -24,7 +34,6 @@ Token Lexer::nextToken() {
 	char ch;
 	ch = fp.get();
 	bool skipped = false;
-	int counter = 1;
 	while (true)
 	{
 
@@ -36,7 +45,6 @@ Token Lexer::nextToken() {
 
 			fp.close();
 
-			return Token(true);
 
 		}
 
@@ -70,16 +78,18 @@ Token Lexer::nextToken() {
 			case ']':
 				return Token("RB", "]", counter);
 
-			case ' ':
+
 			case '\n':
+				ch = fp.get(); // spaces can be ignored
 				counter++;
 				continue;
 			case '\b':
 			case '\f':
 			case '\r':
 			case '\t':
+			case ' ':
 				ch = fp.get(); // spaces can be ignored
-
+				
 				continue;
 
 			case '.':
@@ -182,8 +192,8 @@ Token Lexer::nextToken() {
 
 				fp.unget();
 
-				if (alphaBuffer == "then" || alphaBuffer == "int" || alphaBuffer == "end" || alphaBuffer == "end" ||
-					alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "not") {
+				if (alphaBuffer == "then" || alphaBuffer == "type" || alphaBuffer == "local" || alphaBuffer == "end" ||
+					alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "not" || alphaBuffer == "do") {
 					return Token("KW", alphaBuffer,counter);
 				}
 

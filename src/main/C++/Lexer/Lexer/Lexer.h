@@ -10,4 +10,5 @@ public:
 	Token nextToken();
 	std::string filename;
 	std::fstream fp;
+	static int counter;
 };

@@ -10,15 +10,14 @@ class Parser {
 
 public:
 
-<<<<<<< HEAD
-	std::vector<std::deque<Token> > list;
-=======
+
+
 	std::vector<std::deque<Token>> list;
->>>>>>> refs/remotes/tenoriojuann/master
 	std::string filename;
 	std::deque<Token> tokens;
 
 	void newLine();
+	void foundCOMMENT();
 	Parser(std::string filename);
 	void grabLineCode();
 	void foudnEND();
@@ -26,13 +25,12 @@ public:
 	void foundDO();
 	void foundTHEN();
 	void foundCOMMA();
-	void foundEQ();
-	bool ScanQUEUE(Token var, std::deque<Token> deq);
-<<<<<<< HEAD
-=======
+
+	bool ScanQUEUE(std::string var, std::deque<Token> &deq);
+
 	void printT();
->>>>>>> refs/remotes/tenoriojuann/master
 	void foundIF();
+	void foundID();
 	void foundSM();
 	void foundDIV();
 	void foundSUB();

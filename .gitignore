@@ -48,7 +48,11 @@ src/main/C++/Lexer/Lexer/Parser_Github.sln
 src/main/C++/Lexer/Lexer/Parser_Github.VC.VC.opendb
 src/main/C++/Lexer/Lexer/Parser_Github.vcxproj
 src/main/C++/Lexer/Lexer/Parser_Github.vcxproj.filters
-
+.vs
+srcmain\C++\Lexer\Lexer\.vs
+src/main/C++/Lexer/Lexer/.vs
+src/main/C++/Lexer/Lexer/Lexer.sln
+src/main/C++/Lexer/Lexer/x64
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 

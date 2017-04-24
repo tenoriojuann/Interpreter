@@ -21,18 +21,18 @@ public class Parser {
         while (lex.fp.ready()) {
 
 
-            if (tokens.peekLast().getLexeme() .equals( "if")) {
+            if (tokens.peekLast().getLexeme().equals( "if")) {
                 foundIF();
 
-            } else if (tokens.peekLast().getLexeme() .equals( "then") ){
+            } else if (tokens.peekLast().getLexeme().equals( "then") ){
                 foundTHEN();
-            } else if (tokens.peekLast().getLexeme() .equals( "while") ){
+            } else if (tokens.peekLast().getLexeme().equals( "while") ){
                 foundWHILE();
-            } else if (tokens.peekLast().getLexeme() .equals( "do") ){
+            } else if (tokens.peekLast().getLexeme().equals( "do") ){
                 foundDO();
-            } else if (tokens.peekLast().getLexeme() .equals( "end") ){
+            } else if (tokens.peekLast().getLexeme().equals( "end") ){
                 foudnEND();
-            } else if (tokens.peekLast().getToken() .equals( "ID") ){
+            } else if (tokens.peekLast().getToken().equals( "ID") ){
                 foundID();
             }
 
@@ -60,17 +60,17 @@ public class Parser {
 
 
         // checking special cases
-        if (tmp.getLexeme() .equals( "end") ){
+        if (tmp.getLexeme().equals( "end") ){
             tokens.addLast(tmp);
             foudnEND();
-        } else if (tmp.getLexeme() .equals( "do") ){
+        } else if (tmp.getLexeme().equals( "do") ){
             foundDO();
-        } else if (tmp.getLexeme() .equals( "if") ){
+        } else if (tmp.getLexeme().equals( "if") ){
             list.addLast(tokens);
             tokens.clear();
             tokens.addLast(tmp);
             foundIF();
-        } else if (tmp.getToken() .equals( "COM") ){
+        } else if (tmp.getToken().equals( "COM") ){
             tokens.clear();
             tokens.addLast(tmp);
             foundCOMMENT();
@@ -115,7 +115,7 @@ public class Parser {
     private void foudnEND() {
 
         Token tmp = new Token("RC", "}", tokens.peekLast().getLineNum());
-        if (tokens.peekLast().getLexeme() .equals( "end") ){
+        if (tokens.peekLast().getLexeme().equals( "end") ){
 
             tokens.removeLast();
         }
@@ -175,7 +175,7 @@ public class Parser {
 
         boolean search = false;
 
-        if (tokens.getFirst().getLexeme() .equals( "type") ){
+        if (tokens.getFirst().getLexeme().equals( "type") ){
 
             tokens.getFirst().setLexeme("int");
 

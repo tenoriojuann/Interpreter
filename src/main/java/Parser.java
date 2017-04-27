@@ -66,11 +66,12 @@ public class Parser {
         } else if (tmp.getLexeme().equals( "do") ){
             foundDO();
         } else if (tmp.getLexeme().equals( "if") ){
-            list.addLast(tokens);
+            list.addLast(new LinkedList<Token>(tokens));//because reference clear removed all tokens
             tokens.clear();
             tokens.addLast(tmp);
             foundIF();
         } else if (tmp.getToken().equals( "COM") ){
+            list.addLast(new LinkedList<Token>(tokens));
             tokens.clear();
             tokens.addLast(tmp);
             foundCOMMENT();
@@ -83,6 +84,7 @@ public class Parser {
             list.addLast(tokens);
 
             // Clearing the queue for the new line of the source code
+            list.addLast(new LinkedList<Token>(tokens));
             tokens.clear();
             //Pushing the first token of the new line
             tokens.addLast(tmp);
@@ -119,7 +121,7 @@ public class Parser {
 
             tokens.removeLast();
         }
-        list.addLast(tokens);
+        list.addLast(new LinkedList<Token>(tokens));
         tokens.clear();
         tokens.addLast(tmp);
 
@@ -191,7 +193,8 @@ public class Parser {
 
             // Throw an error if the search return false
             if (!search) {
-                System.out.printf("Error in line %d", tokens.peekLast().getLineNum(), ": variable '%s", tokens.peekLast().getLexeme(), "' is not defined");
+                System.out.printf("ERROR ON LINE: %d Define kind of variable", tokens.getFirst().getLineNum());
+                System.out.println();
             }
         }
 
@@ -211,7 +214,7 @@ public class Parser {
                 .filter(token -> token.getLexeme().equals(var))
                 .findFirst();
 
-        return optional.isPresent() ? true : false;
+        return optional.isPresent();
     }
 
 

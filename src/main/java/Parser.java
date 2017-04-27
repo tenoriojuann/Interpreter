@@ -83,7 +83,7 @@ public class Parser {
             tokens.addLast(new Token("SEMI", ";", tokens.peekLast().getLineNum()));
             list.addLast(tokens);
 
-            // Clearing the queue for the new line of the source code
+            //Clearing the queue for the new line of the source code
             list.addLast(new LinkedList<Token>(tokens));
             tokens.clear();
             //Pushing the first token of the new line
@@ -214,7 +214,7 @@ public class Parser {
                 .filter(token -> token.getLexeme().equals(var))
                 .findFirst();
 
-        return optional.isPresent();
+        return optional.isPresent() ?true:false;
     }
 
 

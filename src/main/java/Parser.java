@@ -66,7 +66,7 @@ public class Parser {
         } else if (tmp.getLexeme().equals( "do") ){
             foundDO();
         } else if (tmp.getLexeme().equals( "if") ){
-           
+
            list.addLast(new LinkedList<>(tokens));//because reference clear removed all tokens
             tokens.clear();
             tokens.addLast(tmp);
@@ -85,6 +85,7 @@ public class Parser {
             list.addLast(new LinkedList<>(tokens));
 
             // Clearing the queue for the new line of the source code
+
 
             tokens.clear();
             //Pushing the first token of the new line

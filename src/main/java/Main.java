@@ -5,7 +5,7 @@ public class Main{
 
     public static void main(String[] args) {
         try {
-            Interpreter in = new Interpreter(args[0]);
+            Interpreter in = new Interpreter("Sample.lua");
         }
         catch (Exception e) {
             System.out.println(e.getMessage());

@@ -31,7 +31,7 @@ public class Parser {
             } else if (tokens.peekLast().getLexeme().equals( "do") ){
                 foundDO();
             } else if (tokens.peekLast().getLexeme().equals( "end") ){
-                foudnEND();
+                foundEND();
             } else if (tokens.peekLast().getToken().equals( "ID") ){
                 foundID();
             }
@@ -61,17 +61,18 @@ public class Parser {
 
         // checking special cases
         if (tmp.getLexeme().equals( "end") ){
-            tokens.addLast(tmp);
-            foudnEND();
+
+            foundEND();
         } else if (tmp.getLexeme().equals( "do") ){
             foundDO();
         } else if (tmp.getLexeme().equals( "if") ){
-            list.addLast(new LinkedList<Token>(tokens));//because reference clear removed all tokens
+           
+           list.addLast(new LinkedList<>(tokens));//because reference clear removed all tokens
             tokens.clear();
             tokens.addLast(tmp);
             foundIF();
         } else if (tmp.getToken().equals( "COM") ){
-            list.addLast(new LinkedList<Token>(tokens));
+            list.addLast(new LinkedList<>(tokens));
             tokens.clear();
             tokens.addLast(tmp);
             foundCOMMENT();
@@ -81,10 +82,15 @@ public class Parser {
         else if (tokens.peekLast().getToken() != "LP" && tokens.peekLast().getToken() != "LC" && tokens.peekLast().getToken() != "RP") {
 
             tokens.addLast(new Token("SEMI", ";", tokens.peekLast().getLineNum()));
-            list.addLast(tokens);
+            list.addLast(new LinkedList<>(tokens));
 
+<<<<<<< HEAD
             //Clearing the queue for the new line of the source code
             list.addLast(new LinkedList<Token>(tokens));
+=======
+            // Clearing the queue for the new line of the source code
+
+>>>>>>> 485dcf51a4b85da013ed7b38ba4d4a1ef26a6574
             tokens.clear();
             //Pushing the first token of the new line
             tokens.addLast(tmp);
@@ -114,14 +120,14 @@ public class Parser {
     }
 
     // function for when an END is found
-    private void foudnEND() {
+    private void foundEND() {
 
         Token tmp = new Token("RC", "}", tokens.peekLast().getLineNum());
         if (tokens.peekLast().getLexeme().equals( "end") ){
 
             tokens.removeLast();
         }
-        list.addLast(new LinkedList<Token>(tokens));
+        list.addLast(new LinkedList<>(tokens));
         tokens.clear();
         tokens.addLast(tmp);
 
@@ -157,7 +163,7 @@ public class Parser {
         tokens.removeLast();
         tokens.addLast(new Token("RP", ")", tmp.getLineNum()));
         tokens.addLast(new Token("LC", "{", tmp.getLineNum()));
-        list.addLast(tokens);
+        list.addLast(new LinkedList<>(tokens));
 
     }
 
@@ -214,7 +220,11 @@ public class Parser {
                 .filter(token -> token.getLexeme().equals(var))
                 .findFirst();
 
+<<<<<<< HEAD
         return optional.isPresent() ?true:false;
+=======
+        return optional.isPresent() ? true : false;
+>>>>>>> 485dcf51a4b85da013ed7b38ba4d4a1ef26a6574
     }
 
 

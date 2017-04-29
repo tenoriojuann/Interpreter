@@ -1,9 +1,9 @@
-if my_var *2 == my_other_var then
+if my_var == my_other_var then
+a=7
 end
-a=3
-while a == b do
-	if c == a/5 then
-	end
-	if var_a == k_var then
-	end
+a = 3
+if c == 2 then
 end
+if a == 3 then
+end
+c = 2

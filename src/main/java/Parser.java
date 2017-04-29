@@ -20,38 +20,38 @@ public class Parser {
         tokens.addLast(tok);
 
         while (lex.fp.ready()) {
-                //if(lex.fp.read()!=(-1)) {//Tried in case ready was not giving a false
+            //if(lex.fp.read()!=(-1)) {//Tried in case ready was not giving a false
 
-                    if (tokens.peekLast().getLexeme().equals("if")) {
-                        foundIF();
+            if (tokens.peekLast().getLexeme().equals("if")) {
+                foundIF();
 
-                    } else if (tokens.peekLast().getLexeme().equals("then")) {
-                        foundTHEN();
-                    } else if (tokens.peekLast().getLexeme().equals("while")) {
-                        foundWHILE();
-                    } else if (tokens.peekLast().getLexeme().equals("do")) {
-                        foundDO();
-                    } else if (tokens.peekLast().getLexeme().equals("end")) {
-                        foundEND();
-                    } else if (tokens.peekLast().getToken().equals("ID")) {
-                        foundID();
-                    }
+            } else if (tokens.peekLast().getLexeme().equals("then")) {
+                foundTHEN();
+            } else if (tokens.peekLast().getLexeme().equals("while")) {
+                foundWHILE();
+            } else if (tokens.peekLast().getLexeme().equals("do")) {
+                foundDO();
+            } else if (tokens.peekLast().getLexeme().equals("end")) {
+                foundEND();
+            } else if (tokens.peekLast().getToken().equals("ID")) {
+                foundID();
+            }
 
 
-                    // Checking for new LINE
-                    tok = lex.nextToken();
-                    // if (tok.getLexeme()!=("KW")) {//Was trying to stop if at end program was causing issue.
-                    if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
-                        tokens.addLast(tok);
-                         newLine();
+            // Checking for new LINE
+            tok = lex.nextToken();
+            // if (tok.getLexeme()!=("KW")) {//Was trying to stop if at end program was causing issue.
+            if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
+                tokens.addLast(tok);
+                newLine();
 
-                    } else {
-                        tokens.addLast(tok);
+            } else {
+                tokens.addLast(tok);
 
-                    }
-                    // }
+            }
+            // }
 
-                //}
+            //}
         }
         lex.fp.close();
 
@@ -64,11 +64,11 @@ public class Parser {
 
 
         // checking special cases
-        if (tmp.getLexeme().equals("end")){
+        if (tmp.getLexeme().equals("end")) {
             foundEND();
-        } else if (tmp.getLexeme().equals("do")){
+        } else if (tmp.getLexeme().equals("do")) {
             foundDO();
-        } else if (tmp.getLexeme().equals("if")){
+        } else if (tmp.getLexeme().equals("if")) {
 
             list.addLast(new LinkedList<>());//because reference clear removed all tokens
             tokens.clear();
@@ -110,8 +110,8 @@ public class Parser {
         String st = tmp.getLexeme();
         String cm = null;
         int index = 0;
-        for(char c : st.toCharArray()){
-            if(index > 1){
+        for (char c : st.toCharArray()) {
+            if (index > 1) {
                 cm += c;
             }
             index++;
@@ -124,11 +124,12 @@ public class Parser {
     private void foundEND() {
 
         Token tmp = new Token("RC", "}", tokens.peekLast().getLineNum());
-        if (tokens.peekLast().getLexeme().equals( "end") ){
+        if (tokens.peekLast().getLexeme().equals("end")) {
 
             tokens.removeLast();
+            tokens.clear();
         }
-        tokens.clear();//**************************************************not sure why it doesn't need a clear.
+        //**************************************************not sure why it doesn't need a clear.
         tokens.addLast(tmp);
 
     }
@@ -164,7 +165,10 @@ public class Parser {
         tokens.removeLast();
         tokens.addLast(new Token("RP", ")", tmp.getLineNum()));
         tokens.addLast(new Token("LC", "{", tmp.getLineNum()));
+
         list.addLast(new LinkedList<>(tokens));
+        tokens.clear();
+        tokens.addLast(tmp);
 
 
     }
@@ -185,7 +189,7 @@ public class Parser {
 
         boolean search = false;
 
-        if (tokens.getFirst().getLexeme().equals( "type") ){
+        if (tokens.getFirst().getLexeme().equals("type")) {
 
             tokens.getFirst().setLexeme("int");
 
@@ -201,7 +205,7 @@ public class Parser {
 
             // Throw an error if the search return false
             if (!search) {
-                System.out.printf("ERROR ON LINE: %d Define kind of variable", tokens.getFirst().getLineNum());
+                System.out.printf("ERROR ON LINE: %d ", tokens.getFirst().getLineNum());
                 System.out.println();
             }
         }
@@ -231,14 +235,22 @@ public class Parser {
         // For every queue in the list
         for (Deque<Token> queue : list) {
             // for every token in the queue
-            for (Token token : queue) {
-                // print the lexeme
-                //if(token.getToken()!=null) {//*******************Still possible may be where last box is coming from that or research all that make ;
-                    System.out.print(token.getLexeme());
-               // }
-            }
+           // if (queue.getFirst().getLexeme() != null) {
+                for (Token token : queue) {
+                    // print the lexeme
+                    //if(token.getToken()!=null) {//*******************Still possible may be where last box is coming from that or research all that make ;
+                    Token t2 = token;
+                    // if (t2.getLexeme() != "end")
+                    System.out.print(t2.getLexeme());
 
-            System.out.println();
+                    // }
+                     }
+
+                    //if(tokens.peekFirst().getLexeme()!="end") {
+                    System.out.println();
+                    // }
+                //}
+           // }
         }
     }
 }

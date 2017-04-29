@@ -1,9 +1,12 @@
-if my_var == my_other_var then
-a=7
+if my_var *2 == my_other_var then
+--do something
 end
-a = 3
-if c == 2 then
+type a
+while a == b do
+	if c == a/5 then
+	--check something
+	end
+	if var_a == k_var then
+	-- check something else
+	end
 end
-if a == 3 then
-end
-c = 2

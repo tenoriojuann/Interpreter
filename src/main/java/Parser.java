@@ -1,4 +1,6 @@
 
+import com.sun.org.apache.xpath.internal.FoundIndex;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -8,7 +10,7 @@ public class Parser {
     private LinkedList<Token> tokens = new LinkedList();
     private LinkedList<LinkedList<Token>> list = new LinkedList();
     private String filename;
-
+    public String pLast;
     public Parser(String filename) {
         this.filename = filename;
     }
@@ -20,21 +22,22 @@ public class Parser {
         tokens.addLast(tok);
 
         while (lex.fp.ready()) {
+
             //if(lex.fp.read()!=(-1)) {//Tried in case ready was not giving a false
-
-            if (tokens.peekLast().getLexeme().equals("if")) {
+            if (tokens.peekLast().getLexeme().equals("while")) {
+                foundWHILE();
+            } else if (tokens.peekLast().getLexeme().equals("if")) {
                 foundIF();
-
             } else if (tokens.peekLast().getLexeme().equals("then")) {
                 foundTHEN();
-            } else if (tokens.peekLast().getLexeme().equals("while")) {
-                foundWHILE();
-            } else if (tokens.peekLast().getLexeme().equals("do")) {
+            }
+        else if (tokens.peekLast().getToken().equals("ID")) {
+                    foundID();
+                }
+             else if (tokens.peekLast().getLexeme().equals("do")) {
                 foundDO();
             } else if (tokens.peekLast().getLexeme().equals("end")) {
                 foundEND();
-            } else if (tokens.peekLast().getToken().equals("ID")) {
-                foundID();
             }
 
 
@@ -44,10 +47,8 @@ public class Parser {
             if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
                 tokens.addLast(tok);
                 newLine();
-
             } else {
-                tokens.addLast(tok);
-
+               tokens.addLast(tok);
             }
             // }
 
@@ -125,12 +126,14 @@ public class Parser {
 
         Token tmp = new Token("RC", "}", tokens.peekLast().getLineNum());
         if (tokens.peekLast().getLexeme().equals("end")) {
-
             tokens.removeLast();
             tokens.clear();
         }
         //**************************************************not sure why it doesn't need a clear.
         tokens.addLast(tmp);
+        pLast="end";
+        list.addLast(new LinkedList<>(tokens));
+        tokens.removeLast();
 
     }
 
@@ -138,7 +141,7 @@ public class Parser {
     private void foundWHILE() {
 
         tokens.addLast(new Token("LP", "(", tokens.peekLast().getLineNum()));
-
+        pLast="while";
     }
 
     // function for when a DO is found
@@ -147,7 +150,7 @@ public class Parser {
         tokens.removeLast();
         tokens.addLast(new Token("RP", ")", tokens.peekLast().getLineNum()));
         tokens.addLast(new Token("LC", "{", tokens.peekLast().getLineNum()));
-
+        pLast="do";
     }
 
     // function for when an IF is found
@@ -155,6 +158,7 @@ public class Parser {
 
         tokens.addLast(new Token("LP", "(", tokens.peekLast().getLineNum()));
         //list.addLast(new LinkedList<>());
+        pLast="if";
 
     }
 
@@ -169,6 +173,7 @@ public class Parser {
         list.addLast(new LinkedList<>(tokens));
         tokens.clear();
         tokens.addLast(tmp);
+        pLast="then";
 
 
     }
@@ -189,29 +194,28 @@ public class Parser {
 
         boolean search = false;
 
-        if (tokens.getFirst().getLexeme().equals("type")) {
 
-            tokens.getFirst().setLexeme("int");
-
-            return;
-        }
 
         // performing the search if the definition of the variable is not within the same line
-        else {
+
             for (LinkedList<Token> queue : list) {
 
                 search = ScanQUEUE(tokens.peekLast().getLexeme(), queue);
+
+
+
             }
 
             // Throw an error if the search return false
             if (!search) {
                 System.out.printf("ERROR ON LINE: %d ", tokens.getFirst().getLineNum());
                 System.out.println();
-            }
+
         }
-
-
     }
+
+
+
 
 
     // Searches a deque for a specific token
@@ -223,7 +227,7 @@ public class Parser {
         // and looking for a specific string
         Optional<Token> optional = queue
                 .stream()
-                .filter(token -> token.getLexeme().equals(var))
+                .filter(token -> token.getLexeme().equals("ID"))
                 .findFirst();
 
         return optional.isPresent();
@@ -243,11 +247,13 @@ public class Parser {
                     // if (t2.getLexeme() != "end")
                     System.out.print(t2.getLexeme());
 
+
                     // }
                      }
 
                     //if(tokens.peekFirst().getLexeme()!="end") {
                     System.out.println();
+
                     // }
                 //}
            // }

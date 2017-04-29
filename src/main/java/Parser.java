@@ -18,37 +18,41 @@ public class Parser {
         Lexer lex = new Lexer(filename);
         Token tok = lex.nextToken();
         tokens.addLast(tok);
+
         while (lex.fp.ready()) {
+                //if(lex.fp.read()!=(-1)) {//Tried in case ready was not giving a false
+
+                    if (tokens.peekLast().getLexeme().equals("if")) {
+                        foundIF();
+
+                    } else if (tokens.peekLast().getLexeme().equals("then")) {
+                        foundTHEN();
+                    } else if (tokens.peekLast().getLexeme().equals("while")) {
+                        foundWHILE();
+                    } else if (tokens.peekLast().getLexeme().equals("do")) {
+                        foundDO();
+                    } else if (tokens.peekLast().getLexeme().equals("end")) {
+                        foundEND();
+                    } else if (tokens.peekLast().getToken().equals("ID")) {
+                        foundID();
+                    }
 
 
-            if (tokens.peekLast().getLexeme().equals( "if")) {
-                foundIF();
+                    // Checking for new LINE
+                    tok = lex.nextToken();
+                    // if (tok.getLexeme()!=("KW")) {//Was trying to stop if at end program was causing issue.
+                    if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
+                        tokens.addLast(tok);
+                         newLine();
 
-            } else if (tokens.peekLast().getLexeme().equals( "then") ){
-                foundTHEN();
-            } else if (tokens.peekLast().getLexeme().equals( "while") ){
-                foundWHILE();
-            } else if (tokens.peekLast().getLexeme().equals( "do") ){
-                foundDO();
-            } else if (tokens.peekLast().getLexeme().equals( "end") ){
-                foundEND();
-            } else if (tokens.peekLast().getToken().equals( "ID") ){
-                foundID();
-            }
+                    } else {
+                        tokens.addLast(tok);
 
+                    }
+                    // }
 
-            // Checking for new LINE
-            tok = lex.nextToken();
-            if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
-                tokens.addLast(tok);
-                newLine();
-            } else {
-                tokens.addLast(tok);
-            }
-
-
+                //}
         }
-
         lex.fp.close();
 
     }
@@ -60,37 +64,34 @@ public class Parser {
 
 
         // checking special cases
-        if (tmp.getLexeme().equals( "end") ){
-
+        if (tmp.getLexeme().equals("end")){
             foundEND();
-        } else if (tmp.getLexeme().equals( "do") ){
+        } else if (tmp.getLexeme().equals("do")){
             foundDO();
-        } else if (tmp.getLexeme().equals( "if") ){
-           
-           list.addLast(new LinkedList<>(tokens));//because reference clear removed all tokens
+        } else if (tmp.getLexeme().equals("if")){
+
+            list.addLast(new LinkedList<>());//because reference clear removed all tokens
             tokens.clear();
             tokens.addLast(tmp);
             foundIF();
-        } else if (tmp.getToken().equals( "COM") ){
+        }/* else if (tmp.getToken().equals( "COM") ){
             list.addLast(new LinkedList<>(tokens));
             tokens.clear();
             tokens.addLast(tmp);
             foundCOMMENT();
-        }
+        }*/
 
         // making sure there are no open/closed parenthesis or curly brackets
         else if (tokens.peekLast().getToken() != "LP" && tokens.peekLast().getToken() != "LC" && tokens.peekLast().getToken() != "RP") {
 
             tokens.addLast(new Token("SEMI", ";", tokens.peekLast().getLineNum()));
+            //list.addLast(new LinkedList<>(tokens));
+
+
+            //Clearing the queue for the new line of the source code
             list.addLast(new LinkedList<>(tokens));
 
-<<<<<<< HEAD
-            //Clearing the queue for the new line of the source code
-            list.addLast(new LinkedList<Token>(tokens));
-=======
             // Clearing the queue for the new line of the source code
-
->>>>>>> 485dcf51a4b85da013ed7b38ba4d4a1ef26a6574
             tokens.clear();
             //Pushing the first token of the new line
             tokens.addLast(tmp);
@@ -127,8 +128,7 @@ public class Parser {
 
             tokens.removeLast();
         }
-        list.addLast(new LinkedList<>(tokens));
-        tokens.clear();
+        tokens.clear();//**************************************************not sure why it doesn't need a clear.
         tokens.addLast(tmp);
 
     }
@@ -153,6 +153,7 @@ public class Parser {
     private void foundIF() {
 
         tokens.addLast(new Token("LP", "(", tokens.peekLast().getLineNum()));
+        //list.addLast(new LinkedList<>());
 
     }
 
@@ -164,6 +165,7 @@ public class Parser {
         tokens.addLast(new Token("RP", ")", tmp.getLineNum()));
         tokens.addLast(new Token("LC", "{", tmp.getLineNum()));
         list.addLast(new LinkedList<>(tokens));
+
 
     }
 
@@ -220,11 +222,8 @@ public class Parser {
                 .filter(token -> token.getLexeme().equals(var))
                 .findFirst();
 
-<<<<<<< HEAD
-        return optional.isPresent() ?true:false;
-=======
-        return optional.isPresent() ? true : false;
->>>>>>> 485dcf51a4b85da013ed7b38ba4d4a1ef26a6574
+        return optional.isPresent();
+
     }
 
 
@@ -234,7 +233,9 @@ public class Parser {
             // for every token in the queue
             for (Token token : queue) {
                 // print the lexeme
-                System.out.print(token.getLexeme());
+                //if(token.getToken()!=null) {//*******************Still possible may be where last box is coming from that or research all that make ;
+                    System.out.print(token.getLexeme());
+               // }
             }
 
             System.out.println();

@@ -39,13 +39,17 @@ public class Parser {
 
             // Checking for new LINE
             tok = lex.nextToken();
-            if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
-                tokens.addLast(tok);
-                newLine();
-            } else {
+            if(tokens.size() > 0) {
+                if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
+                    tokens.addLast(tok);
+                    newLine();
+                } else {
+                    tokens.addLast(tok);
+                }
+            }
+            else {
                 tokens.addLast(tok);
             }
-
 
         }
 
@@ -56,14 +60,11 @@ public class Parser {
     private void newLine() {
         //Token that belongs to the new line
         Token tmp = tokens.peekLast();
-        tokens.getLast();
+        tokens.removeLast();
 
 
         // checking special cases
-        if (tmp.getLexeme().equals( "end") ){
-            tokens.addLast(tmp);
-            foudnEND();
-        } else if (tmp.getLexeme().equals( "do") ){
+        if (tmp.getLexeme().equals( "do") ){
             foundDO();
         } else if (tmp.getLexeme().equals( "if") ){
             list.addLast(new LinkedList<Token>(tokens));//because reference clear removed all tokens
@@ -78,10 +79,10 @@ public class Parser {
         }
 
         // making sure there are no open/closed parenthesis or curly brackets
-        else if (tokens.peekLast().getToken() != "LP" && tokens.peekLast().getToken() != "LC" && tokens.peekLast().getToken() != "RP") {
+        else if (!tokens.peekLast().getToken().equals("LP")  && !tokens.peekLast().getToken().equals("LC")  && !tokens.peekLast().getToken().equals("RP")  ) {
 
             tokens.addLast(new Token("SEMI", ";", tokens.peekLast().getLineNum()));
-            list.addLast(tokens);
+            list.addLast(new LinkedList<>(tokens));
 
             // Clearing the queue for the new line of the source code
             list.addLast(new LinkedList<Token>(tokens));
@@ -97,7 +98,7 @@ public class Parser {
     private void foundCOMMENT() {
 
         Token tmp = tokens.peekLast();
-        tokens.getLast();
+        tokens.removeLast();
 
 
         String st = tmp.getLexeme();
@@ -121,7 +122,7 @@ public class Parser {
 
             tokens.removeLast();
         }
-        list.addLast(new LinkedList<Token>(tokens));
+        list.addLast(new LinkedList<>(tokens));
         tokens.clear();
         tokens.addLast(tmp);
 
@@ -157,7 +158,8 @@ public class Parser {
         tokens.removeLast();
         tokens.addLast(new Token("RP", ")", tmp.getLineNum()));
         tokens.addLast(new Token("LC", "{", tmp.getLineNum()));
-        list.addLast(tokens);
+        list.addLast(new LinkedList<>(tokens));
+        tokens.clear();
 
     }
 

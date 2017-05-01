@@ -7,6 +7,8 @@ public class Main{
 
         try {
 
+
+
             Interpreter in = new Interpreter(Main.class.getResource("Sample.lua").getPath());
         }
        catch (Exception e) {

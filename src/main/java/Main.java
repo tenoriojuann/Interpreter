@@ -6,9 +6,12 @@ public class Main{
     public static void main(String[] args) {
 
         try {
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
             Interpreter in = new Interpreter(Main.class.getResource("Sample.lua").getPath());
         }
        catch (Exception e) {

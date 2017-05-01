@@ -27,25 +27,55 @@ public class Parser {
                 foundIF();
             } else if (tokens.peekLast().getLexeme().equals("then")) {
                 foundTHEN();
+<<<<<<< HEAD
             } else if (tokens.peekLast().getToken().equals("ID")) {
+=======
+            } else if (tokens.peekLast().getLexeme().equals( "while") ){
+                foundWHILE();
+            } else if (tokens.peekLast().getLexeme().equals( "do") ){
+                foundDO();
+            } else if (tokens.peekLast().getLexeme().equals( "end") ){
+                foudnEND();
+            }
+            else if (tokens.peekLast().getToken().equals( "ID") ){
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
                 foundID();
             } else if (tokens.peekLast().getLexeme().equals("do")) {
                 foundDO();
             } else if (tokens.peekLast().getLexeme().equals("end")) {
                 foundEND();
             }
+            else if (tokens.peekLast().getLexeme().equals( "print") ){
+                foundPrint();
+            }
+
+
+
 
 
             // Checking for new LINE
             tok = lex.nextToken();
+<<<<<<< HEAD
 
             // if (tok.getLexeme()!=("KW")) {//Was trying to stop if at end program was causing issue.
             if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
                 tokens.addLast(tok);
                 newLine();
             } else {
+=======
+            if(tokens.size() > 0) {
+                if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
+                    tokens.addLast(tok);
+                    newLine();
+                } else {
+                    tokens.addLast(tok);
+                }
+            }
+            else {
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
                 tokens.addLast(tok);
 
+<<<<<<< HEAD
                 if (tokens.size() > 0) {
                     if (tokens.peekLast().getLineNum() < tok.getLineNum()) {
                         tokens.addLast(tok);
@@ -58,6 +88,9 @@ public class Parser {
 
                 }
                 // }
+=======
+        }
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
 
 
                 //}
@@ -75,6 +108,7 @@ public class Parser {
 
 
         // checking special cases
+<<<<<<< HEAD
 
         if (tmp.getLexeme().equals("end")) {
             foundEND();
@@ -86,6 +120,13 @@ public class Parser {
         } else if (tmp.getLexeme().equals("if")) {
 
             list.addLast(new LinkedList<>());//because reference clear removed all tokens
+=======
+        if (tmp.getLexeme().equals( "do") ){
+            foundDO();
+        }
+        else if (tmp.getLexeme().equals( "if") ){
+            list.addLast(new LinkedList<Token>(tokens));//because reference clear removed all tokens
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
             tokens.clear();
             tokens.addLast(tmp);
             foundIF();
@@ -96,10 +137,12 @@ public class Parser {
             foundCOMMENT();
         }*/
 
+
         // making sure there are no open/closed parenthesis or curly brackets
         else if (!tokens.peekLast().getToken().equals("LP")  && !tokens.peekLast().getToken().equals("LC")  && !tokens.peekLast().getToken().equals("RP")  ) {
 
             tokens.addLast(new Token("SEMI", ";", tokens.peekLast().getLineNum()));
+<<<<<<< HEAD
 
             //list.addLast(new LinkedList<>(tokens));
 
@@ -109,6 +152,10 @@ public class Parser {
             list.addLast(new LinkedList<>(tokens));
 
             // Clearing the queue for the new line of the source code
+=======
+            list.addLast(new LinkedList<>(tokens));
+
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
             tokens.clear();
             //Pushing the first token of the new line
             tokens.addLast(tmp);
@@ -118,6 +165,14 @@ public class Parser {
     }
     }
 
+    private  void foundPrint(){
+
+
+        tokens.addLast(new Token("KW", "System.out.print", tokens.peekLast().getLineNum()));
+
+        tokens.addLast(new Token("LP", "(", tokens.peekLast().getLineNum()));
+
+    }
     // function for when a comment is found
     private void foundCOMMENT() {
 
@@ -147,9 +202,12 @@ public class Parser {
             tokens.removeLast();
             tokens.clear();
         }
+<<<<<<< HEAD
 
         //**************************************************not sure why it doesn't need a clear.
 
+=======
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
         list.addLast(new LinkedList<>(tokens));
         tokens.clear();
 
@@ -191,6 +249,7 @@ public class Parser {
         tokens.removeLast();
         tokens.addLast(new Token("RP", ")", tmp.getLineNum()));
         tokens.addLast(new Token("LC", "{", tmp.getLineNum()));
+<<<<<<< HEAD
 
 
         list.addLast(new LinkedList<>(tokens));
@@ -202,6 +261,10 @@ public class Parser {
         list.addLast(new LinkedList<>(tokens));
         tokens.clear();
 
+=======
+        list.addLast(new LinkedList<>(tokens));
+        tokens.clear();
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
 
     }
 
@@ -221,6 +284,12 @@ public class Parser {
 
         boolean search = false;
 
+<<<<<<< HEAD
+=======
+        if (tokens.getFirst().getLexeme().equals( "type") ){
+
+            tokens.getFirst().setLexeme("int ");
+>>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
 
 
         // performing the search if the definition of the variable is not within the same line

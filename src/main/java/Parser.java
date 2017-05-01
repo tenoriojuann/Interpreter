@@ -1,6 +1,4 @@
 
-import com.sun.org.apache.xpath.internal.FoundIndex;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -22,7 +20,6 @@ public class Parser {
         tokens.addLast(tok);
 
         while (lex.fp.ready()) {
-
             //if(lex.fp.read()!=(-1)) {//Tried in case ready was not giving a false
             if (tokens.peekLast().getLexeme().equals("while")) {
                 foundWHILE();
@@ -126,6 +123,7 @@ public class Parser {
 
         Token tmp = new Token("RC", "}", tokens.peekLast().getLineNum());
         if (tokens.peekLast().getLexeme().equals("end")) {
+
             tokens.removeLast();
             tokens.clear();
         }
@@ -133,7 +131,6 @@ public class Parser {
         tokens.addLast(tmp);
         pLast="end";
         list.addLast(new LinkedList<>(tokens));
-        tokens.removeLast();
 
     }
 

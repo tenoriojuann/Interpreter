@@ -20,18 +20,21 @@ public class ParserV2 {
         tokens.addLast(tok);
         //keeps track of line number for tokens, when next token linenumber > counter adds current linked list token
         //to list and then makes new linked list token for next line.
+        //Tokens are (type, lexeme, line number)
         int counter = 1;
         while (lex.fp.ready()) {
             if (tok.getLineNum() == counter) {
                 tokens.addLast(tok);
             }
 
-            tok=lex.nextToken();
+
             if(tok.getLineNum()>counter){
                 counter++;
                 list.addLast(new LinkedList<>(tokens));
                 tokens.clear();
+                tokens.addLast(tok);
             }
+            tok=lex.nextToken();
         }
         lex.fp.close();
         }

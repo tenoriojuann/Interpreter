@@ -6,10 +6,10 @@ import java.io.IOException;
 public class Interpreter {
 
 
-    private ParserV2 par;
+    private Parser par;
 
     public Interpreter(String filename){
-        par = new ParserV2(filename);
+        par = new Parser(filename);
         try {
             par.populateList();
         } catch (IOException e) {

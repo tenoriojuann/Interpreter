@@ -5,10 +5,10 @@ import java.util.*;
 public class Parser {
 
 
-    private LinkedList<Token> tokens = new LinkedList();
-    private LinkedList<LinkedList<Token>> list = new LinkedList();
+    public LinkedList<Token> tokens = new LinkedList();
+    public LinkedList<LinkedList<Token>> list = new LinkedList();
     private String filename;
-
+    Lexer lex;
     public Parser(String filename) {
         this.filename = filename;
     }
@@ -16,15 +16,20 @@ public class Parser {
     public void populateList() throws IOException {
 
         Lexer lex = new Lexer(filename);
+        this.lex=lex;
         Token tok = lex.nextToken();
         tokens.addLast(tok);
         while (lex.fp.ready()) {
 
+            //keywords
+             if (tokens.peekLast().getLexeme().equals("if")) {
+                 foundIF();
+             }
+             else if (tokens.peekLast().getLexeme().equals("print") ){
+                     foundPrint();
+             }
 
-            if (tokens.peekLast().getLexeme().equals( "if")) {
-                foundIF();
-
-            } else if (tokens.peekLast().getLexeme().equals( "then") ){
+             else if (tokens.peekLast().getLexeme().equals( "then") ){
                 foundTHEN();
             } else if (tokens.peekLast().getLexeme().equals( "while") ){
                 foundWHILE();
@@ -33,12 +38,11 @@ public class Parser {
             } else if (tokens.peekLast().getLexeme().equals( "end") ){
                 foudnEND();
             }
+
             else if (tokens.peekLast().getToken().equals( "ID") ){
                 foundID();
             }
-            else if (tokens.peekLast().getLexeme().equals( "print") ){
-                foundPrint();
-            }
+
 
 
 
@@ -88,8 +92,10 @@ public class Parser {
 
 
         // making sure there are no open/closed parenthesis or curly brackets
-        else if (!tokens.peekLast().getToken().equals("LP")  && !tokens.peekLast().getToken().equals("LC")  && !tokens.peekLast().getToken().equals("RP")  ) {
-
+        else if (!tokens.peekLast().getToken().equals("LP")  && !tokens.peekLast().getToken().equals("LC")  && !tokens.peekLast().getToken().equals("RP") ) {
+            if(tokens.peekLast().getToken().equals("SEMI")){
+                tokens.removeLast();
+            }
             tokens.addLast(new Token("SEMI", ";", tokens.peekLast().getLineNum()));
             list.addLast(new LinkedList<>(tokens));
 
@@ -101,12 +107,14 @@ public class Parser {
 
     }
 
-    private  void foundPrint(){
+    private  void foundPrint()throws IOException{
 
 
-        tokens.addLast(new Token("KW", "System.out.print", tokens.peekLast().getLineNum()));
-
-        tokens.addLast(new Token("LP", "(", tokens.peekLast().getLineNum()));
+        tokens.getLast().setLexeme("System.out.print(");
+                //addLast(new Token("KW", "System.out.print", tokens.peekLast().getLineNum()));
+        tokens.addLast(lex.nextToken());
+        tokens.addLast(new Token("RP", ")", tokens.peekLast().getLineNum()));
+        tokens.addLast(new Token("SEMI", ";", tokens.peekLast().getLineNum()));
 
     }
     // function for when a comment is found

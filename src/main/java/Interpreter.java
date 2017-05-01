@@ -10,8 +10,11 @@ public class Interpreter {
 
     public Interpreter(String filename){
         par = new Parser(filename);
+        LinkedList<Token>
+       // LinkedList<LinkedList<Token>>[] arr;
         try {
             par.populateList();
+            par.list.toArray();
         } catch (IOException e) {
             e.printStackTrace();
         }

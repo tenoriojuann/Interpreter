@@ -173,8 +173,8 @@ public class Lexer {
 
                         fp.unread(ch);
 
-                        if (alphaBuffer == "then" || alphaBuffer == "type" || alphaBuffer == "local" || alphaBuffer == "end" ||
-                                alphaBuffer == "if" || alphaBuffer == "while" || alphaBuffer == "print" || alphaBuffer == "do") {
+                        if (alphaBuffer.equals("then") || alphaBuffer.equals("type") || alphaBuffer.equals("local") || alphaBuffer.equals("end") ||
+                                alphaBuffer.equals("if") || alphaBuffer.equals("while") || alphaBuffer .equals( "print") || alphaBuffer.equals("do")) {
                             return new Token("KW", alphaBuffer,counter);
                         }
 

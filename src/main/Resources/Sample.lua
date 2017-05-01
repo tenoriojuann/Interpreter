@@ -1,8 +1,5 @@
-if my_var *2 == my_other_var then
-end
-while a == b do
-	if c == a/5 then
-	end
-	if var_a == k_var then
-	end
+type  my_var = 5
+type b = 10;
+if my_var == 5 then
+print b
 end

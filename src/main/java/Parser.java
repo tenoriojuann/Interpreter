@@ -32,9 +32,16 @@ public class Parser {
                 foundDO();
             } else if (tokens.peekLast().getLexeme().equals( "end") ){
                 foudnEND();
-            } else if (tokens.peekLast().getToken().equals( "ID") ){
+            }
+            else if (tokens.peekLast().getToken().equals( "ID") ){
                 foundID();
             }
+            else if (tokens.peekLast().getLexeme().equals( "print") ){
+                foundPrint();
+            }
+
+
+
 
 
             // Checking for new LINE
@@ -66,7 +73,8 @@ public class Parser {
         // checking special cases
         if (tmp.getLexeme().equals( "do") ){
             foundDO();
-        } else if (tmp.getLexeme().equals( "if") ){
+        }
+        else if (tmp.getLexeme().equals( "if") ){
             list.addLast(new LinkedList<Token>(tokens));//because reference clear removed all tokens
             tokens.clear();
             tokens.addLast(tmp);
@@ -78,14 +86,13 @@ public class Parser {
             foundCOMMENT();
         }
 
+
         // making sure there are no open/closed parenthesis or curly brackets
         else if (!tokens.peekLast().getToken().equals("LP")  && !tokens.peekLast().getToken().equals("LC")  && !tokens.peekLast().getToken().equals("RP")  ) {
 
             tokens.addLast(new Token("SEMI", ";", tokens.peekLast().getLineNum()));
             list.addLast(new LinkedList<>(tokens));
 
-            // Clearing the queue for the new line of the source code
-            list.addLast(new LinkedList<Token>(tokens));
             tokens.clear();
             //Pushing the first token of the new line
             tokens.addLast(tmp);
@@ -94,6 +101,14 @@ public class Parser {
 
     }
 
+    private  void foundPrint(){
+
+
+        tokens.addLast(new Token("KW", "System.out.print", tokens.peekLast().getLineNum()));
+
+        tokens.addLast(new Token("LP", "(", tokens.peekLast().getLineNum()));
+
+    }
     // function for when a comment is found
     private void foundCOMMENT() {
 
@@ -181,7 +196,7 @@ public class Parser {
 
         if (tokens.getFirst().getLexeme().equals( "type") ){
 
-            tokens.getFirst().setLexeme("int");
+            tokens.getFirst().setLexeme("int ");
 
             return;
         }

@@ -78,7 +78,9 @@ public class Parser {
         if (tmp.getLexeme().equals( "do") ){
             foundDO();
         }
+
         else if (tmp.getLexeme().equals( "if") ){
+            tokens.addLast(new Token("IDEN", ";" , 5));
             list.addLast(new LinkedList<Token>(tokens));//because reference clear removed all tokens
             tokens.clear();
             tokens.addLast(tmp);
@@ -89,6 +91,7 @@ public class Parser {
             tokens.addLast(tmp);
             foundCOMMENT();
         }
+
 
 
         // making sure there are no open/closed parenthesis or curly brackets

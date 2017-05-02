@@ -1,8 +1,6 @@
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileWriter;
+import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
@@ -58,14 +56,16 @@ public class Interpreter  {
         Files.write(sourceFile.toPath(), source.getBytes(StandardCharsets.UTF_8));
 
 // Compile source file.
-        //JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-       // compiler.run(null, null, null, sourceFile.getPath());
+        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        compiler.run(null, null, null, sourceFile.getPath());
 
-        File cFile = new File(root, "ex.class");
-        System.out.print(System.getProperty(cFile.getPath()));
+
 // Load and instantiate compiled class.
         Runtime rt = Runtime.getRuntime();
-        Process pr = rt.exec("java " + cFile.getPath());
+
+        rt.exec("cmd.exe /c C: && dir && cd "+System.getProperty("user.home")+" && dir && start cmd /k java ex");
+
+
 
 
 

@@ -245,6 +245,7 @@ public class Parser {
 
     public void printT() {
         // For every queue in the list
+        //prints to file
         for (Deque<Token> queue : list) {
             // for every token in the queue
             for (Token token : queue) {
@@ -255,4 +256,6 @@ public class Parser {
             System.out.println();
         }
     }
+
+
 }

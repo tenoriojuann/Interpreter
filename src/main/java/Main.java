@@ -1,6 +1,7 @@
 /**
  * Created by Tenorio on 4/24/2017.
  */
+
 public class Main{
 
     public static void main(String[] args) {
@@ -10,5 +11,6 @@ public class Main{
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
     }
 }

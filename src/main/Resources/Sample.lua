@@ -1,5 +1,4 @@
 type  my_var = 5
-type b = 10;
 if my_var == 5 then
-print b
+print 0101010101
 end

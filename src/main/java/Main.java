@@ -1,21 +1,17 @@
+import java.io.IOException;
+
 /**
  * Created by Tenorio on 4/24/2017.
  */
+
 public class Main{
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, IOException, InstantiationException, IllegalAccessException {
 
-        try {
-<<<<<<< HEAD
+            Interpreter in = new Interpreter();
+            in.run(Main.class.getResource("Sample.lua").getPath());
 
 
 
-=======
->>>>>>> 46f190ad4689268773db7ec7ddbf0bc738dd6656
-            Interpreter in = new Interpreter(Main.class.getResource("Sample.lua").getPath());
-        }
-       catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
     }
 }
